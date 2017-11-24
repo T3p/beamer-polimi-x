@@ -4,16 +4,23 @@
 
 \usepackage{enumerate}
 \usepackage{multimedia}
+\usepackage{bbm}
 
 \usetheme{polimix}
+
+%My commands
+\newcommand{\expect}[2]{\mathop{E}_{#1}\left[#2\right]}
+\newcommand{\hold}{\addtocounter{framenumber}{-1}}
+% % % %
  
 \title[Short title]{Long title}
 \subtitle{subtitle}
 
-\author[author]{author}
-\supervisor{Supervisor}{supervisor name}
-\coadvisor{Co-Advisor}{co advisor name}
-\date[31/04/1955]{31 Febbraio 1955}
+\title[Retrace]{Retrace($\lambda$)}
+\subtitle{Temporal Credit Assignment in Off-Policy Reinforcement Learning}
+
+\author[Matteo Papini]{Matteo Papini}
+\date[28/11/17]{28th November 2017}
 
 \begin{document}
 
@@ -28,22 +35,168 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
-\frametitle{Sommario}
+\frametitle{Before we start...}
+\end{frame}
+
+\begin{frame}
+\frametitle{Syllabus}
 \tableofcontents
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Section A}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\frame{\tableofcontents[currentsection]}
 
 \begin{frame}
-\frametitle{Title A1}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id ex ornare, gravida nisi in, ornare risus. Aenean eu posuere purus. Curabitur molestie consequat eleifend. Ut imperdiet at risus quis suscipit. Suspendisse ligula ligula, euismod in vestibulum non, lobortis a dolor. Mauris varius risus eu tristique pretium. Nullam placerat, ligula id mollis sagittis, diam leo interdum sapien, nec molestie enim leo et felis. Etiam maximus convallis libero, ac venenatis nunc sagittis nec. Proin nunc justo, iaculis eu dui ut, suscipit fermentum nisl. Donec bibendum tellus in diam posuere finibus. Donec sed luctus leo. Nulla eget interdum dolor. Suspendisse orci ex, pharetra vitae aliquam ac, rutrum in dui.
-
+\frametitle{Reinforcement Learning}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Section B}
+\begin{frame}
+\frametitle{Value Function}
+\end{frame}
+
+\begin{frame}
+\frametitle{Policy Iteration}
+\end{frame}
+
+\begin{frame}
+\frametitle{Temporal Difference Learning}
+Value Function update at time $t$:
+\[
+	Q(s_t,a_t) \gets Q(s_t,a_t) + \alpha\left[\textcolor{blue}{G_t} - Q(s_t,a_t)\right] 
+\]
+\[
+	\Delta Q(s_t,a_t) = \alpha\left[\textcolor{blue}{G_t} - Q(s_t,a_t)\right]
+\]
+\end{frame}
+
+\begin{frame}
+\frametitle{Expected Sarsa}
+\begin{itemize}
+\item \textbf{Forward view}: look one step forward to compute the target
+\[
+	G_t = r_{t+1} + \gamma\expect{a\sim\pi}{Q(s_{t+1},a)}
+\]
+\item \textbf{Backward view}: wait one step to update $Q(s_t,a_t)$
+\begin{align*}
+	\Delta Q(s_{t-1},a_{t-1}) = \alpha\left[r_t + \gamma\expect{a\sim\pi}{Q(s_t,a)} - Q(s_{t-1},a_{t-1})\right] 
+\end{align*}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Temporal Credit Assignment Problem}
+\end{frame}
+
+\begin{frame}
+\frametitle{n-step Expected Sarsa}
+Look far (n steps) in the future:
+\begin{align*}
+	G_t^{(n)} &\doteq r_{t+1} + \gamma r_{t+2} + \dots + \gamma^{n-1}r_{t+n}
+		+ \gamma^n\expect{a\sim\pi}{Q(s_{t+n},a)} \\
+		& = \sum_{k=1}^{n}\gamma^{k-1}r_{t+k} +  \gamma^n\expect{a\sim\pi}{Q(s_{t+n},a)}
+\end{align*}
+\begin{itemize}
+\item $G_t^{(1)}$ is a TD target
+\item $G_t^{(T-t)}$ is a Monte Carlo target
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eligibility Traces}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+\frametitle{Forward View}
+Average \textbf{all} n-step targets:
+\only<-2>{
+\[
+	G_t^{\lambda} \doteq (1-\lambda)\sum_{n=1}^{\only<1>{\infty}\only<2>{T}}\lambda^{n-1} G_t^{(n)}
+\]
+}
+\only<3->{
+\[
+	G_t^{\lambda} = (1-\lambda)\sum_{n=1}^{T-t-1}\lambda^{n-1} G_t^{(n)} + \lambda^{T-t-1}G_t^{(T-t)}
+\]
+}
+\begin{itemize}
+\item<4-> $\lambda=0$ gives $G_t^{(1)}$, the TD target
+\item<5-> $\lambda=1$ gives $G_t^{(T-t)}$, the Monte Carlo target
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Backward View}
+Video here
+\end{frame}
+
+\begin{frame}
+\frametitle{Eligibility Traces}
+\end{frame}
+
+\begin{frame}
+\frametitle{Accumulating Traces}
+Update at step $t$:
+\begin{align*}
+&
+\only<1>{e(s,a) \gets \gamma\lambda e(s,a) + \mathbbm{1}\{s=s_t,a=a_t\}}
+\only<2>{e \gets \gamma\lambda e + \mathbbm{1}_t} 
+\\
+\only<1>{& \Delta Q(s,a) = \alpha e(s,a)(G_t^{(1)} - Q(s,a))}
+\only<2>{& \Delta Q = \alpha e\delta_t}
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Replacing Traces}
+Update at step $t$:
+\begin{align*}
+& 
+e \gets \textcolor{red}{(1-\mathbbm{1}_t)}\gamma\lambda e + \mathbbm{1}_t \\
+& \Delta Q = \alpha e\delta_t
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dutch Traces}
+Update at step $t$:
+\begin{align*}
+& e \gets (1-\textcolor{red}{\alpha}\mathbbm{1}_t)\gamma\lambda e + \mathbbm{1}_t
+\\
+& \Delta Q = \alpha e\delta_t
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{General Traces}
+Update at time t:
+\begin{align*}
+\only<1>{& \Delta Q = \alpha e_t\delta_t}
+\only<2>{& \Delta Q = \alpha \gamma^t\left(\prod_{s=1}^tc_s\right)\delta_t}
+\end{align*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Off-policy Credit Assignment}
+\frame{\tableofcontents[currentsection]}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Retrace($\lambda$)}
+\frame{\tableofcontents[currentsection]}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experiments}
+\frame{\tableofcontents[currentsection]}
+%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 \frametitle{Title B1}
@@ -94,7 +247,6 @@ Another proof style.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Section C}
 
 \begin{frame}
 \frametitle{Title C1}
