@@ -5,7 +5,8 @@
 \usepackage{enumerate}
 \usepackage{multimedia}
 \usepackage{bbm}
-\usepackage{booktabs}  
+\usepackage{booktabs}
+\usepackage{caption}  
 
 \usetheme{polimix}
 
@@ -178,7 +179,7 @@ Bellman optimality \textbf{operator}:
 \end{frame}
 
 \begin{frame}
-\frametitle{Why "expected" sarsa?}
+\frametitle{Why "Expected" Sarsa?}
 \begin{itemize}
 \item Short answer: useful later
 \item Longer answer: Van Seijen et al. \cite{van2009theoretical}
@@ -264,20 +265,45 @@ Average \textbf{all} n-step targets:
 
 \begin{frame}
 \frametitle{Backward View}
-Video here
-\end{frame}
+\begin{itemize}
+\item Propagate TD error to past states
+\item Fading memory
+\end{itemize}
 
+\vfill
+\centering
+\bigskip\bigskip
+\includegraphics[height=3cm]{images/lambda}
+
+\end{frame}
 \begin{frame}
 \frametitle{Eligibility Traces}
+\begin{itemize}
+\item Assign a "trace" to each state-action pair
+\item Set the trace to one when visited
+\item All traces fade with time
+\item TD update proportional to trace
+
+\vfill
+\centering
+\bigskip\bigskip
+\includegraphics[height=3cm]{images/trace}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Replacing Traces}
+Initialization:
+\[
+	e(s,a) \gets 0 \text{ for all} s,a
+\]
 Update \textbf{all states} at each step $t$:
 \begin{align*}
 &
-\only<1>{e(s,a) \gets \textcolor{red}{(1 - \mathbbm{1}\{s=s_t,a=a_t\})}\gamma\lambda e(s,a) + \textcolor{red}{\mathbbm{1}\{s=s_t,a=a_t\}}}
-\only<2>{e \gets (1 - \mathbbm{1}_t)\gamma\lambda e(s,a) + \mathbbm{1}_t} 
+\only<1>{e(s,a) \gets 
+\textcolor{red}{\mathbbm{1}\{s=s_t,a=a_t\}}+ 
+\textcolor{red}{(1 - \mathbbm{1}\{s=s_t,a=a_t\})}\gamma\lambda e(s,a)} 
+\only<2>{e \gets  \mathbbm{1}_t + (1 - \mathbbm{1}_t)\gamma\lambda e(s,a)} 
 \\
 \only<1>{& \Delta Q(s,a) = \alpha e(s,a)(G_t^{(1)} - Q(s,a))}
 \only<2>{& \Delta Q = \alpha e\delta_t}
@@ -454,10 +480,10 @@ In this formulation we call the $\textcolor{red}{\bf{c_i}}$ "traces".
 \begin{itemize}
 \item $c_i = \frac{\pi(a_i\mid s_i)}{\mu(a_i\mid s_i)}$ 
 \only<2->{$\implies$Importance Sampling!}
-\item $c_i = \lambda  
-\only<3->{\implies Q^{\pi}(\lambda)}$ 
-\item $c_i = \lambda\pi(a_i\mid s_i) 
- \only<4->{\implies TB(\lambda)}$
+\item $c_i = \lambda$  
+\only<3->{$\implies Q^{\pi}(\lambda)$} [citation here] 
+\item $c_i = \lambda\pi(a_i\mid s_i)$
+ \only<4->{$\implies TB(\lambda)$} [citation here] 
 \end{itemize}
 \end{frame}
 
@@ -619,6 +645,8 @@ Then $Q_k\rightarrow Q^*$ as $\epsilon_k \rightarrow 0$
 Remarks
 \begin{itemize}
 \item No GLIE assumption on $\mu$
+\item Extends to continuous action spaces
+\item $c_i$ must be Markovian
 \end{itemize}
 }
 \end{frame}
@@ -629,10 +657,10 @@ Remarks
 \begin{align*}
 	&\alpha_k
 	\sum_{k\geq t}\left[
-	(G_k^{(1)} - Q(s_k,a_k))
+	\textcolor{blue}{(G_k^{(1)} - Q(s_k,a_k))}
 	\sum_{j=t}^k\gamma^{k-j}
 	\left(\prod_{i=j+1}^k 
-	\lambda\min\left\{1,\frac{\pi(a_i\mid s_i)}{\mu(a_i\mid s_i)}\right\}
+	\textcolor{blue}{\lambda\min\left\{1,\frac{\pi(a_i\mid s_i)}{\mu(a_i\mid s_i)}\right\}}
 	\right)
 	\mathbbm{1}_{jt}
 	\right]
@@ -640,7 +668,7 @@ Remarks
 \only<2->{
 \begin{itemize}
 \item<2-> when $\pi$ is a greedy policy, $G_t^{(1)}$ is just $G_t^*$ 
-\item<3->  when $\pi$ is a greedy policy, $c_i = \mathbbm{1}\left\{\mu_k(s_i) = \pi_{\text{greedy}}(s_i)\right\}$
+\item<3->  when $\pi$ is a greedy policy, $c_i = \lambda\mathbbm{1}\left\{\mu_k(s_i) = \pi_{\text{greedy}}(s_i)\right\}$
 \end{itemize}
 }
 \only<4>{
@@ -652,15 +680,47 @@ Remarks
 \end{frame}
 
 \begin{frame}
-\frametitle{The Tortoise and the Hare}
+\frametitle{Retrace($\lambda$) in practice}
 Retrace($\lambda$) is more general than Watkins' $Q(\lambda)$
-
-For instance, $\pi_k$ and $\mu_k$ can both be increasingly greedy policies, with $\pi_k$ converging faster than $\mu_k$
-
+\pause
+\begin{itemize}
+\item<2-> $\pi_k$ and $\mu_k$ can both be increasingly greedy policies, with $\pi_k$ converging faster than $\mu_k$ $\implies $ A3C [citation here]
+\item<3-> $\mu$ can be a snapshot of $\pi$ $\implies$ DQN with memory replay [citation here]
+\end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiments}
 \frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+\frametitle{Atari Games: Retrace($\lambda$) vs DQN} 
+\centering
+\bigskip\bigskip
+\includegraphics[height=3.4cm]{images/atari1}
+
+Asteroids, Defender, Demon Attack, Hero, Krull,
+River Raid, Space Invaders, Star Gunner, Wizard of Wor, Zaxxon
+\end{frame}
+
+\begin{frame}
+\frametitle{Atari Games: Full Comparison} 
+\begin{minipage}[b]{.5\textwidth}
+\includegraphics[height=4cm]{images/atari2}
+\end{minipage}%
+\begin{minipage}[b]{.5\textwidth}
+\begin{tabular}{lc}
+\toprule
+Algorithm & Times Best \\
+\midrule
+DQN & 12 \\
+$Q^*(\lambda)$ & 2 \\
+TB($\lambda$) & 16 \\
+Retrace($\lambda$) & \textbf{30} \\
+\bottomrule
+\end{tabular}
+\captionof{table}{$\lambda = 1$}
+\end{minipage}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
@@ -692,107 +752,6 @@ Update at step $t$:
 Seijen and Sutton, 2014 \cite{seijen2014true}
 \end{frame}
 
-\begin{frame}
-\frametitle{Title B1}
-
-\begin{itemize}
-\addtolength{\itemsep}{.2cm}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-\item Nulla id ex ornare, gravida nisi in, ornare risus.
-  \begin{itemize}
-    \addtolength{\itemsep}{.1cm}
-  \item[1.] Aenean eu posuere purus.
-  \item[2.] Etiam maximus convallis libero, ac venenatis nunc sagittis nec.
-  \end{itemize}
-\item Suspendisse orci ex, pharetra vitae aliquam ac, rutrum in dui.
-\end{itemize}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-\frametitle{Title B2}
-
-\begin{theorem}[Th. Name]
-\label{thlabel} This is a theorem
-\begin{itemize}
-\item Property 1;
-\item Property 2.
-\end{itemize}
-\end{theorem}
-
-\pause
-
-\textit{Proof. }
-\begin{align}
-    a + b & = c \\
-    a & = c - b \\
-    answer & = 42
-\end{align}
-\qed
-
-\pause
-
-\begin{proof}
-Another proof style.
-\end{proof}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-\frametitle{Title C1}
-
-\begin{columns}[t, onlytextwidth]
-\column{.33\textwidth}
-First column.\\
-\onslide<3>{\bigskip Appears with third column}
-\pause{}
-\column{.33\textwidth}
-Second column.
-\pause
-\column{.33\textwidth}
-Third column.
-\end{columns}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-\frametitle{Title C2}
-
-
-\centering
-Image:\\
-\bigskip\bigskip
-\includegraphics[height=2cm]{style_img/20090504_Politecnico_0006_02}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-\frametitle{Title C3}
-
-
-\begin{enumerate}
- \item lorem
- \item Ipsus
- \begin{enumerate}
-    \item sub1
-    \item sub3
-    \begin{enumerate}
-      \item sub4
-      \item sub5
-    \end{enumerate}
- \end{enumerate}
-\end{enumerate}
-
-
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
