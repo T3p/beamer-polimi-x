@@ -6,7 +6,7 @@
 \usepackage{multimedia}
 \usepackage{bbm}
 \usepackage{booktabs}
-\usepackage{caption}  
+\usepackage{caption}
 
 \usetheme{polimix}
 
@@ -40,6 +40,19 @@
 
 \begin{frame}
 \frametitle{Before we start...}
+\only<1>
+{ACAI Summer School on Reinforcement Learning
+
+Nieuwpoort, Belgium, 7-14 October 2017 
+\centering
+\includegraphics[height=6.5cm]{images/summer_school1}
+}
+\only<2>{
+Munos et al., "Safe and efficient off-policy reinforcement learning", NIPS 2016 \cite{munos2016safe}
+\vfill
+\centering
+\includegraphics[height=6cm]{images/summer_school2}
+}
 \end{frame}
 
 \begin{frame}
@@ -49,10 +62,48 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-\frame{\tableofcontents[currentsection]}
+%\frame{\tableofcontents[currentsection]}
 
 \begin{frame}
+\only<1>{
 \frametitle{Reinforcement Learning}
+\centering
+\includegraphics[height=6cm]{images/rl}
+}
+\only<2->{
+\begin{minipage}{0.6\textwidth}
+\centering
+\includegraphics[height=4cm]{images/rl}
+\end{minipage}%
+\begin{minipage}{0.4\textwidth}
+The Task
+\[
+	\langle\mathcal{S},\mathcal{A},\mathcal{P},\mathcal{R},\gamma,\rho\rangle
+\]
+\only<2>{
+\begin{itemize}
+\item $\mathcal{S}$: state space
+\item $\mathcal{A}$: action space
+\item $\mathcal{P}$: transition probabilities
+\item $\mathcal{R}$: reward function
+\item $\gamma$: discount factor
+\item $\rho$: initial state distribution
+\end{itemize}
+}
+\only<3->{
+The agent's policy
+\[
+	\pi: \mathcal{S}\mapsto\Delta(\mathcal{A})
+\]
+}
+\only<4->{
+The goal
+\[
+	\max \sum_{t\geq 0}\gamma^t r_t
+\]
+}
+\end{minipage}
+}
 \end{frame}
 
 \begin{frame}
@@ -64,6 +115,29 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{Temporal Credit Assignment}
+The effects of a choice may not be immediate 
+
+\only<2>{$\implies$ delayed reward}
+\vfill
+\centering
+\centerline{\includegraphics[height=5cm]{images/marshmallow}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Off-Policy Credit Assignment}
+\begin{itemize}
+\item<1-2> \textbf{Temporal Credit Assignment}: determine which actions, among a sequence of actions, are responsible for certain rewards
+\item<2> \textbf{Off-Policy Learning}: evaluate/improve policy $\pi$ while following policy $\mu$
+\item<3-> \textbf{Off-Policy Credit Assignment}: how can I give credit to choices that are not actually made?
+\end{itemize}
+\end{frame}
+% % % % % % % % % % % % % % % % % % % % % % %
+
+% % % % % % % % % % % % % % % % % % % % % % %
+\section{Temporal Difference Learning}
+\frame{\tableofcontents[currentsection]}
 \begin{frame}
 \frametitle{Value Function}
 Bellman expectation equation:
@@ -105,6 +179,17 @@ Bellman optimality \textbf{operator}:
 \end{itemize}
 \end{frame}
 
+\hold\hold\hold
+\begin{frame}
+\frametitle{Prediction and Control}
+\begin{itemize}
+\item \textbf{Prediction}: given policy $\pi$, compute $Q^{\pi}$
+
+\item \textbf{Control}: find $\pi^*$ such that $Q^{\pi^*}$ = $Q^*$
+\end{itemize}
+\end{frame}
+\jump\jump
+
 \begin{frame}
 \begin{itemize}
 \item<1-> Optimal \textbf{deterministic} policy:
@@ -126,17 +211,6 @@ Bellman optimality \textbf{operator}:
 \end{itemize}
 \end{frame}
 
-\hold\hold\hold
-\begin{frame}
-\frametitle{Prediction and Control}
-\begin{itemize}
-\item \textbf{Prediction}: given policy $\pi$, compute $Q^{\pi}$
-
-\item \textbf{Control}: find $\pi^*$ such that $Q^{\pi^*}$ = $Q^*$
-\end{itemize}
-\end{frame}
-\jump\jump
-
 \begin{frame}
 \frametitle{Temporal Difference Learning}
 \begin{itemize}
@@ -144,12 +218,12 @@ Bellman optimality \textbf{operator}:
 \item<2-> Approximation: update Q towards a target
 \only<2>{
 \[
-	Q(s_t,a_t) \gets Q(s_t,a_t) + \alpha\left[\textcolor{blue}{G_t} - Q(s_t,a_t)\right] 
+	Q(s_t,a_t) \gets Q(s_t,a_t) + \alpha\underbrace{\left[\textcolor{blue}{G_t} - Q(s_t,a_t)\right]}_{\text{TD error } \delta_t} 
 \]
 }
 \only<3->{
 \[
-	\Delta Q(s_t,a_t) = \alpha\left[\textcolor{blue}{G_t} - Q(s_t,a_t)\right]
+	\Delta Q(s_t,a_t) = \alpha\underbrace{\left[\textcolor{blue}{G_t} - Q(s_t,a_t)\right]}_{\text{TD error } \delta_t}
 \]
 }
 \item<4> Prediction: fixed $\pi$, keep updating Q
@@ -170,24 +244,35 @@ Bellman optimality \textbf{operator}:
 \[
 	\Delta Q(s_t,a_t) = \alpha\left[\textcolor{blue}{r_{t+1} + \gamma\expect{a\sim\pi}{Q(s_{t+1},a)}} - Q(s_t,a_t)\right]
 \]
-\item<2> \textbf{Backward view}: wait one step to update $Q(s_t,a_t)$
+\item<2-> \textbf{Backward view}: wait one step to update $Q(s_t,a_t)$
 \begin{align*}
 	\Delta Q(s_{t-1},a_{t-1}) = \alpha\left[
 	\textcolor{blue}{r_t + \gamma\expect{a\sim\pi}{Q(s_t,a)}} - Q(s_{t-1},a_{t-1})\right] 
 \end{align*}
 \end{itemize}
+\only<3>{
+Convergence in tabular case \cite{van2009theoretical}
+}
 \end{frame}
 
 \begin{frame}
 \frametitle{Why "Expected" Sarsa?}
 \begin{itemize}
 \item Short answer: useful later
-\item Longer answer: Van Seijen et al. \cite{van2009theoretical}
+\item Longer answer: less variance than traditional Sarsa
+\item Complete answer: Van Seijen et al. \cite{van2009theoretical}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Temporal Credit Assignment Problem}
+\frametitle{Temporal Credit Assignment}
+How to give credit (assign value) to $(s_t,a_t)$?
+
+\begin{itemize}
+\item<1->
+\textbf{Problem}: the choice of $a_t$ in $s_t$ could be rewarded at time $t+n$
+\item<2->\textbf{Solution}: look at future reward!
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -197,7 +282,7 @@ Look far (n steps) in the future:
 	G_t^{(n)} &\doteq r_{t+1} + \gamma r_{t+2} + \dots + \gamma^{n-1}r_{t+n}
 		+ \gamma^n\expect{a\sim\pi}{Q(s_{t+n},a)} \\
 		& = \textcolor{blue}{
-		\only<1>{
+		\only<1,4>{
 		\sum_{k=1}^{n}\gamma^{k-1}r_{t+k} + \gamma^n\expect{a\sim\pi}{Q(s_{t+n},a)}
 		}\only<2>{
 		r_{t+1}+\gamma\expect{a\sim\pi}{Q(s_{t+n},a)}
@@ -211,7 +296,11 @@ Look far (n steps) in the future:
 \end{itemize}
 \only<4>{
 \vfill
-\textbf{How can we use all future returns while keeping the variance low?}
+\textbf{How can we use all future returns
+\begin{itemize}
+\item without storing all history
+\item without delaying updates
+\end{itemize}}
 }
 \end{frame}
 
@@ -226,7 +315,7 @@ Look far (n steps) in the future:
 \begin{frame}
 \frametitle{Forward View}
 Average \textbf{all} n-step targets:
-\only<1>{
+\only<1,5>{
 \[
 	G_t^{\lambda} \doteq (1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1} G_t^{(n)}
 \]
@@ -258,9 +347,10 @@ Average \textbf{all} n-step targets:
 \]
 }
 \begin{itemize}
-\item<3> $\lambda=0$ gives $G_t^{(1)}$, the TD target
-\item<4> $\lambda=1$ gives $G_t^{(T-t)}$, the Monte Carlo target
+\item<3,5> $\lambda=0$ gives $G_t^{(1)}$, the TD target
+\item<4,5> $\lambda=1$ gives $G_t^{(T-t)}$, the Monte Carlo target
 \end{itemize}
+\only<5>{\vfill Another way of interpolating between TD and MC}
 \end{frame}
 
 \begin{frame}
@@ -273,7 +363,7 @@ Average \textbf{all} n-step targets:
 \vfill
 \centering
 \bigskip\bigskip
-\includegraphics[height=3cm]{images/lambda}
+\centerline{\includegraphics[height=3cm]{images/lambda}}
 
 \end{frame}
 \begin{frame}
@@ -287,12 +377,12 @@ Average \textbf{all} n-step targets:
 \vfill
 \centering
 \bigskip\bigskip
-\includegraphics[height=3cm]{images/trace}
+\centerline{\includegraphics[height=3cm]{images/trace}}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Replacing Traces}
+\frametitle{Accumulating Traces}
 Initialization:
 \[
 	e(s,a) \gets 0 \text{ for all} s,a
@@ -300,25 +390,23 @@ Initialization:
 Update \textbf{all states} at each step $t$:
 \begin{align*}
 &
-\only<1>{e(s,a) \gets 
+e(s,a) \gets 
 \textcolor{red}{\mathbbm{1}\{s=s_t,a=a_t\}}+ 
-\textcolor{red}{(1 - \mathbbm{1}\{s=s_t,a=a_t\})}\gamma\lambda e(s,a)} 
-\only<2>{e \gets  \mathbbm{1}_t + (1 - \mathbbm{1}_t)\gamma\lambda e(s,a)} 
-\\
-\only<1>{& \Delta Q(s,a) = \alpha e(s,a)(G_t^{(1)} - Q(s,a))}
-\only<2>{& \Delta Q = \alpha e\delta_t}
+\gamma\lambda e(s,a)
+& \Delta Q(s,a) = \alpha e(s,a)(G_t^{(1)} - Q(s,a))
 \end{align*}
 \end{frame}
 
 \begin{frame}
 \frametitle{Back to the forward view}
+Accumulating traces
 \begin{align*}
 	\Delta & Q(s_t,a_t) = \\ 
 	&\alpha_k
-	\sum_{k\geq t}\left[
-	(G_k^{(1)} - Q(s_k,a_k))
+	\sum_{h\geq t}\left[
+	(G_h^{(1)} - Q(s_h,a_h))
 	\textcolor{blue}{
-	\sum_{j=t}^k(\gamma\lambda)^{k-j}
+	\sum_{j=t}^n(\gamma\lambda)^{h-j}
 	\mathbbm{1}\left\{s_j,a_j = s_t,a_t\right\}}
 	\right]
 \end{align*}
@@ -342,6 +430,7 @@ Potentially, both can change!
 \vfill
 Advantages: 
 \begin{itemize}
+\item Safe
 \item Separate exploration from evaluation
 \item Reuse past experience
 \end{itemize}
@@ -352,7 +441,7 @@ Advantages:
 Correct the update with likelihood ratios
 \[
 	\Delta Q(s_t,a_t) = \alpha
-	\textcolor{blue}{\prod_{k\geq t}\frac{\pi(a_k\mid s_k)}{\mu(a_k\mid s_k)}}
+	\textcolor{blue}{\prod_{h\geq t}\frac{\pi(a_h\mid s_h)}{\mu(a_h\mid s_h)}}
 	\left[G_t^{(n)} - Q(s_t,a_t)\right]
 \]
 \vfill
@@ -380,14 +469,13 @@ Implicit target policy: $\pi_{\text{greedy($Q$)}}$
 Maximization as a special case of expectation
 
 $\implies$ $G_t^* = G_t^{(1)}$ when $\pi$ is a greedy policy
-
-$\implies$ Q-learning is a special case of Expected Sarsa!
 }
 \end{frame}
 
 \begin{frame}
 \frametitle{Credit Assignment}
-
+\centering
+\centerline{\includegraphics[height=4.5cm]{images/off_credit}}
 \end{frame}
 
 \begin{frame}
@@ -461,7 +549,7 @@ Back to the forward view
 	\mathbbm{1}_{jt}
 	\right]
 \end{align*}
-In this formulation we call the $\textcolor{red}{\bf{c_i}}$ "traces".
+In this formulation we call the $\textcolor{red}{\bf{c_i}}$ "traces"
 }
 \end{frame}
 
@@ -481,9 +569,9 @@ In this formulation we call the $\textcolor{red}{\bf{c_i}}$ "traces".
 \item $c_i = \frac{\pi(a_i\mid s_i)}{\mu(a_i\mid s_i)}$ 
 \only<2->{$\implies$Importance Sampling!}
 \item $c_i = \lambda$  
-\only<3->{$\implies Q^{\pi}(\lambda)$} [citation here] 
+\only<3->{$\implies Q^{\pi}(\lambda)$ \cite{harutyunyan2016q}} 
 \item $c_i = \lambda\pi(a_i\mid s_i)$
- \only<4->{$\implies TB(\lambda)$} [citation here] 
+ \only<4->{$\implies TB(\lambda)$ \cite{precup2000eligibility}}
 \end{itemize}
 \end{frame}
 
@@ -491,7 +579,7 @@ In this formulation we call the $\textcolor{red}{\bf{c_i}}$ "traces".
 \frametitle{$Q^{\pi}(\lambda)$}
 \begin{itemize}
 \item Traces: $c_i = \lambda$
-\item Idea: 
+\item Idea: Do not cut traces
 \item Low variance
 \item \textcolor{red}{Issue:} not safe
 
@@ -506,7 +594,7 @@ Convergence only if $\pi\simeq\mu$:
 \frametitle{Tree-Backup $TB(\lambda)$}
 \begin{itemize}
 \item Traces: $c_i = \lambda\pi(a_i\mid s_i)$
-\item Idea: 
+\item Idea: soft cut
 \item Convergence for any $\pi,\mu$
 \item \textcolor{red}{Issue:} not efficient
 
@@ -616,7 +704,7 @@ Show that $\norm[\infty]{\mathcal{R}Q-Q^{\pi}}\leq\gamma\norm[\infty]{Q-Q^{\pi}}
 \begin{itemize}
 \item<2->\textbf{Safe} since $0\leq c_i\leq\frac{\pi(a_i\mid s_i)}{\mu(a_i\mid s_i)}$
 \item<3-> \textbf{Low variance} since $c_i\leq 1$
-\item<4-> \textbf{Efficient on-policy} since $c_i\rightarrow 1$ as $\mu\rightarrow\pi$
+\item<4-> \textbf{Efficient on-policy} since $c_i\rightarrow \lambda$ as $\mu\rightarrow\pi$
 \end{itemize}
 }
 \end{frame}
@@ -684,8 +772,8 @@ Remarks
 Retrace($\lambda$) is more general than Watkins' $Q(\lambda)$
 \pause
 \begin{itemize}
-\item<2-> $\pi_k$ and $\mu_k$ can both be increasingly greedy policies, with $\pi_k$ converging faster than $\mu_k$ $\implies $ A3C [citation here]
-\item<3-> $\mu$ can be a snapshot of $\pi$ $\implies$ DQN with memory replay [citation here]
+\item<2-> $\pi_k$ and $\mu_k$ can both be increasingly greedy policies, with $\pi_k$ converging faster than $\mu_k$ $\implies $ A3C \cite{mnih2016asynchronous}
+\item<3-> $\mu$ can be a snapshot of $\pi$ $\implies$ DQN with memory replay \cite{mnih2015human}
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -718,26 +806,64 @@ TB($\lambda$) & 16 \\
 Retrace($\lambda$) & \textbf{30} \\
 \bottomrule
 \end{tabular}
-\captionof{table}{$\lambda = 1$}
 \end{minipage}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusion}
+\begin{itemize}
+\item Retrace($\lambda$) combines \textbf{off-policy} learning and \textbf{multi-step returns} in a \textbf{safe} and \textbf{efficient} way
+\item In practice, it propagates sparse rewards faster than TB($\lambda$) without the convergence problems of naive Q($\lambda$)
+\item With $\pi=\text{greedy(Q)}$ we have Watkin's Q-learning
+\item With $\lambda=1$ we have truncated importance sampling
+\item The theorems leave room for improvement
+\end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
+\frametitle{Thank you!}
+\centerline{\huge{Questions?}}
+\centerline{\includegraphics[4 cm]{images/marshmallow3}}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
 \bibliography{biblio}
 \bibliographystyle{plain}
+\end{frame}
+% % % % % % % % % % % % % % % % % % % %
+
+\begin{frame}
+\frametitle{The Semigradient Version}
+\begin{align*}
+	&\boldsymbol{\theta} \gets \boldsymbol{\theta} + \alpha\delta_t \boldsymbol{e} \\
+	& e \gets \nabla\hat{Q}_{\boldsymbol{\theta}}(s_t,a,_t)+\gamma\lambda \boldsymbol{e}
+\end{align*}
 \end{frame}
 
 \begin{frame}
 \frametitle{Accumulating Traces}
-Update \textbf{all states} at each step $t$:
+Update at step $t$:
 \begin{align*}
 &
-\only<1>{e(s,a) \gets \gamma\lambda e(s,a) + \mathbbm{1}\{s=s_t,a=a_t\}}
-\only<2>{e \gets \gamma\lambda e + \mathbbm{1}_t} 
+\only<1>{e(s,a) \gets 
+\textcolor{red}{\mathbbm{1}\{s=s_t,a=a_t\}}+ 
+\gamma\lambda e(s,a)} 
+\only<2>{e \gets  \textcolor{red}{\mathbbm{1}_t} + \gamma\lambda e(s,a)} 
 \\
 \only<1>{& \Delta Q(s,a) = \alpha e(s,a)(G_t^{(1)} - Q(s,a))}
 \only<2>{& \Delta Q = \alpha e\delta_t}
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Replacing Traces}
+Update at step $t$:
+\begin{align*}
+&
+e \gets \textcolor{red}{(1-\mathbbm{1}_t)}\gamma\lambda e + \mathbbm{1}_t 
+\\
+& \Delta Q = \alpha e\delta_t
 \end{align*}
 \end{frame}
 
@@ -754,12 +880,5 @@ Seijen and Sutton, 2014 \cite{seijen2014true}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-\frametitle{Video}
-\movie[width=\textwidth, height = 0.8\paperheight, poster, autostart, borderwidth=1pt]{}{video/test.mp4} 
-
-\end{frame}
-
 
 \end{document} 
