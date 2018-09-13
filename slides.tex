@@ -142,7 +142,7 @@ A small $\alpha$ is safe, but slows down convergence. The adaptive algorithm can
 Idea: also adapt the \textbf{batch size} used to estimate the gradient
 
 \begin{align*}
-	\widehat{\nabla}_{\theta}J(\theta) = \frac{1}{\textcolor{red}{\mathbf{N}}}\sum_{i=0}^{N}\underbrace{\textcolor{lightgray}{\left[\sum_{t=0}^T\left(\sum_{h=0}^t\nabla_{\theta}\log\pi_{\theta}(a_h^i\mid s_h^i)\right) \gamma^tr_t\right]}}_{\text{gradient information from $i$-th episode of experience}}
+	\widehat{\nabla}_{\theta}^NJ(\theta) = \frac{1}{\textcolor{red}{\mathbf{N}}}\sum_{i=0}^{N}\underbrace{\textcolor{lightgray}{\left[\sum_{t=0}^T\left(\sum_{h=0}^t\nabla_{\theta}\log\pi_{\theta}(a_h^i\mid s_h^i)\right) \gamma^tr_t\right]}}_{\text{gradient information from $i$-th episode of experience}}
 \end{align*}
 
 A large batch size is safe, but is inefficient.
@@ -215,10 +215,14 @@ Recent optimization techniques, such as \textbf{SVRG}~\cite{johnson2013accelerat
 \vfill
 
 \begin{columns}
-	\begin{column}{0.6\textwidth}
+	\begin{column}{0.59\textwidth}
 		Idea: apply SVRG to policy gradient
+		\scriptsize
+		\begin{align*}
+			\blacktriangledown_{\theta}J(\theta) = \widehat{\nabla}_{\theta}^NJ(\widetilde{\theta}) + \widehat{\nabla}_{\theta}^BJ(\theta) - w(\theta,\widetilde{\theta})\widehat{\nabla}_{\theta}^BJ(\theta)
+		\end{align*}
 	\end{column}
-	\begin{column}{0.3\textwidth}
+	\begin{column}{0.29\textwidth}
 		\includegraphics[width=\textwidth]{pics/cheetah.jpeg}
 	\end{column}
 \end{columns}
@@ -238,7 +242,25 @@ Contributions:
 
 \begin{frame}
 \frametitle{Policy Optimization via Importance Sampling}
+Reusing the same data for multiple updates (\textbf{off-policy learning}) can improve \textbf{sample efficiency}
 
+\vfill
+
+Unfortunately, updates degrade as the target policy $\pi_{\theta}$ goes further away from the one used to collect data $\pi_{\tilde{\theta}}$ (\textbf{covariate shift})
+
+\vfill
+
+Idea: penalize \textbf{divergence} in the learning objective
+\begin{align*}
+	\mathcal{L}(\theta) = w(\widetilde{\theta},\theta)\nabla_{\theta}^NJ(\theta) - \frac{\lambda}{N}d(\pi_{\theta}, \pi_{\tilde{\theta}})
+\end{align*}
+
+Contributions:
+\begin{itemize}
+	\item We propose a surrogate objective with strong theoretical motivations
+	\item We consider both \textbf{control-based} and \textbf{parameter-based} optimization
+	\item We improve over state-of-the-art (TRPO~\cite{schulman2015trust}) in several benchmark tasks
+\end{itemize}
 
 \end{frame}
 
@@ -249,6 +271,36 @@ Contributions:
 \begin{frame}
 \frametitle{Future Work}
 
+Short term (one year):
+\begin{itemize}
+	\item Study the problem of \textbf{exploration} in more depth to better capture the costs and advantages of exploratory behavior
+\end{itemize}
+
+\vfill
+
+Long term (two years):
+\begin{itemize}
+	\item \textbf{Unify} the proposed methods to achieve efficient safe exploration
+	\item Tackle more challenging and \textbf{realistic} problems
+\end{itemize}
+
+\vfill
+
+\begin{columns}
+	\begin{column}{0.35\textwidth}
+		\includegraphics[height=50pt]{pics/cheetah.jpeg}
+	\end{column}
+%	\begin{column}{0.49\textwidth}
+%		\includegraphics[height=50pt]{pics/real_cheetah.jpg}
+%	\end{column}
+	\begin{column}{0.1\textwidth}
+		\centering
+		\LARGE$\to$
+	\end{column}
+	\begin{column}{0.35\textwidth}
+	\includegraphics[height=50pt]{pics/factory.jpg}
+	\end{column}
+\end{columns}
 
 \end{frame}
 
@@ -275,9 +327,9 @@ Contributions:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \frametitle{Bibliography}
-\bibliographystyle{plain}
+\bibliographystyle{brev}
 \bibliography{slides}
 
 \end{frame}
