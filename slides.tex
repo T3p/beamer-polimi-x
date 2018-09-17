@@ -62,27 +62,21 @@ Design \textbf{efficient} and \textbf{reliable} controllers for real-world probl
 
 
 \begin{frame}
-\frametitle{Policy Search \cite{deisenroth2013survey}}
-
-Search for the policy $\pi \in \Pi$ that maximizes the expected sum of rewards ${J(\pi) = \mathop{E_{\pi}}\left[\sum_{t=0}^{T}\gamma^tr_t\right]}$
-
-\vfill
+\frametitle{Policy Search}
+\framesubtitle{RL for Continuous Control}
+A \textbf{Markov Decision Process (MDP)} models the agent-environment interaction:
 
 \begin{center}
-\includegraphics[width=.5\textwidth]{pics/rl.png}
+	\includegraphics[width=.5\textwidth]{pics/rl.png}
 \end{center}
 
-\vfill
-
-Can manage \textbf{continuous} states and action spaces
+A \textbf{policy} $\pi(a\vert s)$ models the agent's behavior
 
 \vfill
 
-\textbf{Policy Gradient (PG)}~\cite{sutton2000policy}:
-\begin{itemize}
-	\item Restrict the search to parametric policies $\pi_{\theta}$ where $\theta \in \Theta$
-	\item Search via gradient ascent on $J(\theta)$
-\end{itemize}
+\textbf{Policy Search}~\cite{deisenroth2013survey}: find policy $\pi \in \Pi$ that maximizes the expected sum of rewards ${J(\pi) = \mathop{E_{\pi}}\left[\sum_{t=0}^{T}\gamma^tr_t\right]}$
+
+\textbf{Policy Gradient (PG)}~\cite{sutton2000policy}: restrict the search to parametric policies $\pi_{\theta}$ where $\theta \in \Theta$, search via gradient ascent on~$J(\theta)$
 
 \end{frame}
 
@@ -91,9 +85,6 @@ Can manage \textbf{continuous} states and action spaces
 \frametitle{Adaptive Policy Search}
 
 \textbf{Adaptation} is needed to trade-off competing aspects of learning on real systems:
-
-\vspace{5pt}
-
 \begin{itemize}
 	\item Safety and efficiency
 	\item Exploration and safety
@@ -102,13 +93,19 @@ Can manage \textbf{continuous} states and action spaces
 
 \vfill
 
-and to autonomously react to:
-
-\vspace{5pt}
-
+\textbf{Possible approaches:}
 \begin{itemize}
-	\item Changes in the external conditions
-	\item Changes in the objectives
+	\item Adpative hyper-parameter schedules for existing algorithms
+	\item New algorithms with modified objectives or novel techniques
+\end{itemize}
+
+\vfill
+
+\textbf{State of the art}:
+\begin{itemize}
+	\item Safe RL literature \cite{garcia2015comprehensive} mainly regarding value-based methods 
+	\item Adaptive-step-size PG \cite{pirotta2013adaptive,schulman2015trust}: existing algorithms are either too conservative  or heavily heuristic
+	\item Risk-aware methods \cite{moldovan2014safety} focus on intrinsic uncertainty
 \end{itemize}
 
 \end{frame}
@@ -118,15 +115,14 @@ and to autonomously react to:
 
 
 \begin{frame}
-\frametitle{Safe Policy Gradient}
-
+\frametitle{Safe Policy Gradient~\small(State of the Art)}
 "Safety" is used with many meanings in the literature \cite{garcia2015comprehensive}. We focus on \textbf{performance guarantees}~\cite{kakade2002approximately, thomas2015high}, either with a danger-avoidance or an economic meaning:
 
 \begin{align*}
 	J(\theta') - J(\theta) \geq C \quad\text{ in high probability}
 \end{align*}
 
-In \textbf{policy gradient} safety can be ensured with an \textbf{adaptive step size}~\cite{pirotta2013adaptive}:
+In \textbf{policy gradient} (e.g., REINFORCE \cite{williams1992simple}) safety can be ensured with an \textbf{adaptive step size}~\cite{pirotta2013adaptive}:
 
 \begin{align*}
 	\theta' = \theta + \textcolor{red}{\mathbf{\alpha}}\widehat{\nabla}_{\theta}J(\theta)
@@ -138,18 +134,18 @@ A small $\alpha$ is safe, but slows down convergence. The adaptive algorithm can
 
 
 \begin{frame}
-\frametitle{Adaptive Batch Size for Safe Policy Gradient~\cite{papini2017adaptive}}
+\frametitle{Adaptive Batch Size for Safe PG~\small(NIPS 2017\footnote{Submitted before starting the PhD})}
 Idea: also adapt the \textbf{batch size} used to estimate the gradient
 
 \begin{align*}
 	\widehat{\nabla}_{\theta}^NJ(\theta) = \frac{1}{\textcolor{red}{\mathbf{N}}}\sum_{i=0}^{N}\underbrace{\textcolor{lightgray}{\left[\sum_{t=0}^T\left(\sum_{h=0}^t\nabla_{\theta}\log\pi_{\theta}(a_h^i\mid s_h^i)\right) \gamma^tr_t\right]}}_{\text{gradient information from $i$-th episode of experience}}
 \end{align*}
 
-A large batch size is safe, but is inefficient.
+A large batch size is safe, but inefficient.
 
 \vfill
 
-Contributions:
+Contributions~\cite{papini2017adaptive}:
 \begin{itemize}
 	\item We show that \textbf{coordinate ascent} yields better guarantees than gradient ascent
 	\item We show an interesting duality between step size and batch size
@@ -160,7 +156,7 @@ Contributions:
 
 
 \begin{frame}
-\frametitle{Safely Exploring Policy Gradient}
+\frametitle{Safely Exploring Policy Gradient \small(submitted to AAAI 2019\footnote{A short version was accepted for the EWRL14 workshop})}
 Existing guarantees are on \textbf{Gaussian policies} with fixed variance:
 \begin{align*}
 	\pi_{\theta}(a \vert s) = \mathcal{N}(\mu_{\theta}(s), \textcolor{red}{\mathbf{\sigma}})
@@ -184,10 +180,11 @@ Contributions:
 
 
 \begin{frame}
-\frametitle{Safe Policy Gradient: Frontiers}
+\frametitle{Safe Policy Gradient \small(submitted to MLJ)}
+\framesubtitle{Frontiers}
 In more recent work:
 \begin{itemize}
-	\item We provide \textbf{general safety guarantees} that do \textit{not} assume a specific class of policies. The general policy requirements are:
+	\item We provide \textbf{general safety guarantees} that do \textit{not} assume a specific class of policies, but just require $\pi$ to satisfy some general properties:
 	
 	\begin{align*}
 		&\sup_{s}\mathop{E}_{a\sim\pi_{\theta}}\left[\left|\nabla_{\theta}\log\pi_{\theta}(a\vert s)\right|\right] < \infty \\
@@ -205,8 +202,8 @@ In more recent work:
 
 
 \begin{frame}
-\frametitle{Stochastic Variance-Reduced Policy Gradient~\cite{papini2018stochastic}}
-Sample inefficiency is the main obstacle to real-world applications of policy search~\cite{recht2018tour}, and is made even worse by safety requirements
+\frametitle{Stochastic Variance-Reduced Policy Gradient~\small(ICML 2018)}
+\textbf{Sample inefficiency} is the main obstacle to real-world applications of policy search~\cite{recht2018tour}, and is made even worse by safety requirements.
 
 \vfill
 
@@ -216,11 +213,11 @@ Recent optimization techniques, such as \textbf{SVRG}~\cite{johnson2013accelerat
 
 \begin{columns}
 	\begin{column}{0.59\textwidth}
-		Idea: apply SVRG to policy gradient
-		\scriptsize
-		\begin{align*}
-			\blacktriangledown_{\theta}J(\theta) = \widehat{\nabla}_{\theta}^NJ(\widetilde{\theta}) + \widehat{\nabla}_{\theta}^BJ(\theta) - w(\theta,\widetilde{\theta})\widehat{\nabla}_{\theta}^BJ(\theta)
-		\end{align*}
+		Idea: apply SVRG to PG \textbf{(SVRPG)}
+%		\scriptsize
+%		\begin{align*}
+%			\blacktriangledown_{\theta}J(\theta) = \widehat{\nabla}_{\theta}^NJ(\widetilde{\theta}) + \widehat{\nabla}_{\theta}^BJ(\theta) - w(\theta,\widetilde{\theta})\widehat{\nabla}_{\theta}^BJ(\theta)
+%		\end{align*}
 	\end{column}
 	\begin{column}{0.29\textwidth}
 		\includegraphics[width=\textwidth]{pics/cheetah.jpeg}
@@ -229,7 +226,7 @@ Recent optimization techniques, such as \textbf{SVRG}~\cite{johnson2013accelerat
 
 \vfill
 
-Contributions:
+Contributions~\cite{papini2018stochastic}:
 \begin{itemize}
 	\item We analyze the potential and challenges of SVRG in RL
 	\item We propose an SVRG-based policy gradient algorithm
@@ -257,9 +254,9 @@ Idea: penalize \textbf{divergence} in the learning objective
 
 Contributions:
 \begin{itemize}
-	\item We propose a surrogate objective with strong theoretical motivations
-	\item We consider both \textbf{control-based} and \textbf{parameter-based} optimization
-	\item We improve over state-of-the-art (TRPO~\cite{schulman2015trust}) in several benchmark tasks
+	\item We propose a surrogate objective with strong theoretical motivations $\implies$ \textbf{POIS} algorithm
+	\item We consider both control-based and \textbf{parameter-based} optimization
+	\item We improve over state-of-the-art~\cite{schulman2015trust} in several benchmark tasks
 \end{itemize}
 
 \end{frame}
@@ -273,7 +270,9 @@ Contributions:
 
 Short term (one year):
 \begin{itemize}
-	\item Study the problem of \textbf{exploration} in more depth to better capture the costs and advantages of exploratory behavior
+	\item Study the problem of \textbf{exploration} in more depth to better capture the costs and advantages of exploratory behavior.
+	\textit{Target: ICML 2019}
+	\item Refine the POIS algorithm. \textit{Target: JMLR}
 \end{itemize}
 
 \vfill
@@ -307,29 +306,82 @@ Long term (two years):
 
 \begin{frame}
 \frametitle{Attended Courses and Schools}
+\textbf{Passed courses:}
+\begin{itemize}
+	\item DEEP LEARNING: THEORY, TECHNIQUES AND APPLICATIONS (A)
+	\item IMAGE CLASSIFICATION: MODERN APPROACHES (A)
+	\item COMMUNICATING SCIENTIFIC RESEARCH (A) 
+	\item SCIENTIFIC COMMUNICATION IN ENGLISH (A)
+\end{itemize}
 
+\vfill
+
+\textbf{Summer schools:}
+\begin{itemize}
+	\item ACAI Summer School on Reinforcement Learning,  Nieuwpoort, Belgium, 2018 (EXTERNAL COURSE WITH EVALUATION, A)
+	\item 2018 Deep Learning and Reinforcement Learning Summer School, Toronto, Canada
+\end{itemize}
 
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Publications and Submissions}
+\textbf{Conference papers:}
+\begin{itemize}
+	\scriptsize
+	\item Papini, M., Binaghi, D., Canonaco, G., Pirotta, M. \& Restelli, M. (2018). \textit{Stochastic Variance-Reduced Policy Gradient}. Proceedings of the 35th International Conference on Machine Learning, in PMLR 80:4026-4035
+	\item Alberto Maria Metelli, Matteo Papini, Francesco Faccio, Marcello Restelli; \textit{Policy Optimization via Importance Sampling}; Neural Information Processing Systems 2018 (\textit{to~appear})
+\end{itemize}
 
+\vfill
+
+\textbf{Workshop papers:}
+\begin{itemize}
+	\scriptsize
+	\item Matteo Papini, Andrea Battistello, Marcello Restelli; \textit{Safely Exploring Policy Gradient}; 14th European workshop on Reinforcement Learning
+\end{itemize}
+
+\vfill
+
+\textbf{Submissions:}
+\begin{itemize}
+	\scriptsize
+	\item Matteo Papini, Andrea Battistello, Marcello Restelli; \textit{Safely Exploring Policy Gradient}; AAAI Conference on Artificial Intelligence 2019
+	\item Matteo Papini, Matteo Pirotta, Marcello Restelli; \textit{Safe Policy Gradient}; Machine Learning Journal, Springer
+\end{itemize}
 
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Other Activities}
+\textbf{Teaching 2017/2018:}
+\begin{itemize}
+	\item Informatica B, Prof. Luca Cassano, \textit{lab assistant}, 9 hours
+	\item Web and Internet Economics, Prof. Nicola Gatti, \textit{teaching assistant}, 10 hours
+\end{itemize}
 
+\vfill
 
+\textbf{Previous publications}
+\begin{itemize}
+	\item Papini, Matteo, Matteo Pirotta, and Marcello Restelli. \textit{Adaptive batch size for safe policy gradients}. Advances in Neural Information Processing Systems. 2017
+\end{itemize}
+
+\vfill
+
+\textbf{Industrial projects:}
+\begin{itemize}
+	\item Industry 4.0 (Regione Lombardia, Pirelli)
+\end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[allowframebreaks]
 \frametitle{Bibliography}
-\bibliographystyle{brev}
+\bibliographystyle{apalike}
 \bibliography{slides}
 
 \end{frame}
