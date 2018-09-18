@@ -8,11 +8,11 @@
 \usetheme{polimix}
  
 \title[Adaptive Policy Search]{Adaptive Policy Search}
-\subtitle{First Annual Report}
+\subtitle{PhD Course in Information Technology, XIII cycle \\First Annual Report}
 
 \author[M. Papini]{Matteo Papini}
-\supervisor{Supervisor}{Marcello Restelli}
-\date[19/9/2018]{19 Settembre 2018}
+\supervisor{\small Supervisor}{\small Marcello Restelli}
+\date[19/9/2018]{\small 19 Settembre 2018}
 
 \begin{document}
 
@@ -65,18 +65,16 @@ Design \textbf{efficient} and \textbf{reliable} controllers for real-world probl
 \frametitle{Policy Search}
 \framesubtitle{RL for Continuous Control}
 A \textbf{Markov Decision Process (MDP)} models the agent-environment interaction:
-
 \begin{center}
 	\includegraphics[width=.5\textwidth]{pics/rl.png}
 \end{center}
-
 A \textbf{policy} $\pi(a\vert s)$ models the agent's behavior
 
 \vfill
 
 \textbf{Policy Search}~\cite{deisenroth2013survey}: find policy $\pi \in \Pi$ that maximizes the expected sum of rewards ${J(\pi) = \mathop{E_{\pi}}\left[\sum_{t=0}^{T}\gamma^tr_t\right]}$
 
-\textbf{Policy Gradient (PG)}~\cite{sutton2000policy}: restrict the search to parametric policies $\pi_{\theta}$ where $\theta \in \Theta$, search via gradient ascent on~$J(\theta)$
+\textbf{\textcolor{magenta}{Policy Gradient (PG)}}~\cite{sutton2000policy}: restrict the search to parametric policies $\pi_{\theta}$ via gradient ascent on~$J(\theta)$
 
 \end{frame}
 
@@ -93,11 +91,11 @@ A \textbf{policy} $\pi(a\vert s)$ models the agent's behavior
 
 \vfill
 
-\textbf{Possible approaches:}
-\begin{itemize}
-	\item Adpative hyper-parameter schedules for existing algorithms
-	\item New algorithms with modified objectives or novel techniques
-\end{itemize}
+%\textbf{Possible approaches:}
+%\begin{itemize}
+%	\item Adpative hyper-parameter schedules for existing algorithms
+%	\item New algorithms with modified objectives or novel techniques
+%\end{itemize}
 
 \vfill
 
@@ -145,13 +143,16 @@ A large batch size is safe, but inefficient.
 
 \vfill
 
+\colorbox{cyan!10}{
+\begin{minipage}{\textwidth}
 Contributions~\cite{papini2017adaptive}:
 \begin{itemize}
 	\item We show that \textbf{coordinate ascent} yields better guarantees than gradient ascent
 	\item We show an interesting duality between step size and batch size
 	\item We provide an adaptive batch size to trade-off safety and efficiency
 \end{itemize}
-
+\end{minipage}
+}
 \end{frame}
 
 
@@ -170,31 +171,41 @@ Policy variance controls \textbf{exploration}: random behavior used to collect n
 
 \vfill
 
+\colorbox{cyan!10}{
+\begin{minipage}{\textwidth}
 Contributions:
 \begin{itemize}
 	\item We generalize safety requirements to model \textit{more practical} scenarios, such as the \textbf{fine-tuning} of handcrafted controllers
 	\item We introduce a surrogate objective that encodes the \textbf{long-term advantages} of exploration
 	\item We extend safety guarantees to the learned-variance case
 \end{itemize}
+\end{minipage}
+}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Safe Policy Gradient \small(submitted to MLJ)}
 \framesubtitle{Frontiers}
+\colorbox{cyan!10}{
+	\begin{minipage}{\textwidth}
 In more recent work:
 \begin{itemize}
-	\item We provide \textbf{general safety guarantees} that do \textit{not} assume a specific class of policies, but just require $\pi$ to satisfy some general properties:
+	\item We further study the \textbf{convergence properties} of policy gradient methods
+	\item We provide \textbf{general safety guarantees} that do \textit{not} assume a specific class of policies
+\end{itemize}
+\end{minipage}
+}
+
+\vfill
 	
-	\begin{align*}
+\textit{General safety conditions:}
+\begin{align*}
 		&\sup_{s}\mathop{E}_{a\sim\pi_{\theta}}\left[\left|\nabla_{\theta}\log\pi_{\theta}(a\vert s)\right|\right] < \infty \\
 		&\sup_{s}\mathop{E}_{a\sim\pi_{\theta}}\left[\left|\nabla_{\theta}\log\pi_{\theta}(a\vert s)\nabla_{\theta}\log\pi_{\theta}(a\vert s)^T\right|\right] < \infty \\
 		&\sup_{s}\mathop{E}_{a\sim\pi_{\theta}}\left[\left|\mathop{Hess}\left(\log\pi_{\theta}(a\vert s)\right)\right|\right] < \infty \\
 	\end{align*}
 	
-	\item We further study the \textbf{convergence properties} of policy gradient methods
-\end{itemize}
-
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -203,11 +214,11 @@ In more recent work:
 
 \begin{frame}
 \frametitle{Stochastic Variance-Reduced Policy Gradient~\small(ICML 2018)}
-\textbf{Sample inefficiency} is the main obstacle to real-world applications of policy search~\cite{recht2018tour}, and is made even worse by safety requirements.
+\textbf{Sample inefficiency} is the main obstacle to real-world applications of PG~\cite{recht2018tour}, made even worse by safety requirements.
 
 \vfill
 
-Recent optimization techniques, such as \textbf{SVRG}~\cite{johnson2013accelerating}, combine accurate and inaccurate gradient estimations to achieve a better \textbf{effective convergence rate}
+Recent optimization techniques, such as \textbf{SVRG} \cite{johnson2013accelerating}, combine accurate and inaccurate gradient estimations to improve the \textbf{effective convergence rate}
 
 \vfill
 
@@ -226,19 +237,22 @@ Recent optimization techniques, such as \textbf{SVRG}~\cite{johnson2013accelerat
 
 \vfill
 
-Contributions~\cite{papini2018stochastic}:
+\colorbox{cyan!10}{
+	\begin{minipage}{\textwidth}
+Contributions~\cite{pmlr-v80-papini18a}:
 \begin{itemize}
 	\item We analyze the potential and challenges of SVRG in RL
 	\item We propose an SVRG-based policy gradient algorithm
 	\item We prove a theoretical \textbf{rate of convergence}
 	\item We empirically show advantages over naive optimization
 \end{itemize}
-
+\end{minipage}
+}
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Policy Optimization via Importance Sampling}
+\frametitle{Policy Optimization via Importance Sampling~\small(NIPS 2018\footnote{Accepted for oral presentation})}
 Reusing the same data for multiple updates (\textbf{off-policy learning}) can improve \textbf{sample efficiency}
 
 \vfill
@@ -252,13 +266,16 @@ Idea: penalize \textbf{divergence} in the learning objective
 	\mathcal{L}(\theta) = w(\widetilde{\theta},\theta)\nabla_{\theta}^NJ(\theta) - \frac{\lambda}{N}d(\pi_{\theta}, \pi_{\tilde{\theta}})
 \end{align*}
 
+\colorbox{cyan!10}{
+	\begin{minipage}{\textwidth}
 Contributions:
 \begin{itemize}
 	\item We propose a surrogate objective with strong theoretical motivations $\implies$ \textbf{POIS} algorithm
 	\item We consider both control-based and \textbf{parameter-based} optimization
 	\item We improve over state-of-the-art~\cite{schulman2015trust} in several benchmark tasks
 \end{itemize}
-
+\end{minipage}
+}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -375,6 +392,13 @@ Long term (two years):
 \begin{itemize}
 	\item Industry 4.0 (Regione Lombardia, Pirelli)
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{}
+\centering
+\LARGE
+\textit{Thank you for your attention}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
