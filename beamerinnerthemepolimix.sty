@@ -6,7 +6,8 @@
 	\begin{tikzpicture}
 	\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
 	\draw[draw=none] (0,\the\paperwidth) rectangle (\the\paperwidth,0.2\paperheight)
-			      node[pos=0.5]{\includegraphics[width=\paperwidth]{style_img/20090504_Politecnico_0006_02.jpg}};
+			      node[pos=0.5]{%\includegraphics[width=\paperwidth]{style_img/20090504_Politecnico_0006_02.jpg}
+			      };
 	% 			node[pos=0.5]{\includegraphics[width=\paperwidth]{style_img/20090511_Politecnico_3190_01.jpg}};
 	\fill[color=poliblue3] (0,0) rectangle (\the\paperwidth,.45\paperheight);
 	\draw[draw=none] (0,.52\paperwidth) rectangle (\the\paperwidth,.45\paperheight)

@@ -7,17 +7,16 @@
 
 \usetheme{polimix}
  
-\title[Adaptive Policy Search]{Adaptive Policy Search}
-\subtitle{PhD Course in Information Technology, XIII cycle \\First Annual Report}
+\title[Safe Policy Optimization]{Safe Policy Optimization}
+\subtitle{{\small Ph.D. Course in Information Technology, XXXIII cycle} \\Second Annual Report}
 
 \author[M. Papini]{Matteo Papini}
 \supervisor{\small Supervisor}{\small Marcello Restelli}
-\date[19/9/2018]{\small 19 Settembre 2018}
+\date[30/9/2019]{\small 30 Settembre 2019}
 
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{frame}
 \titlepage
 \end{frame}
@@ -25,383 +24,130 @@
 \addtocounter{framenumber}{-1}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\begin{frame}
-%\frametitle{Sommario}
-%\tableofcontents
-%\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Overview}
-
 \begin{frame}
 \frametitle{Motivation}
-Design \textbf{efficient} and \textbf{reliable} controllers for real-world problems (robotics, industrial processes...) where accurate models are not available
-
-\vfill
-
-\textbf{Reinforcement Learning (RL)~\cite{sutton1998reinforcement}} is a powerful technique for model-free control and achieved great results in \textit{games}. To tackle real problems, we need RL methods that are:
-
-\vfill
-
-\begin{columns}
-	\begin{column}{.6\textwidth}
-		\begin{itemize}
-			\item \textbf{Continuous}
-			\item \textbf{Safe}
-			\item \textbf{Sample-efficient}
-		\end{itemize}
-	\end{column}
-	\begin{column}{.4\textwidth}
-		\includegraphics[width=\textwidth]{pics/robots.jpg}
-	\end{column}
-\end{columns}
-
-
 \end{frame}
 
-
-\begin{frame}
-\frametitle{Policy Search}
-\framesubtitle{RL for Continuous Control}
-A \textbf{Markov Decision Process (MDP)} models the agent-environment interaction:
-\begin{center}
-	\includegraphics[width=.5\textwidth]{pics/rl.png}
-\end{center}
-A \textbf{policy} $\pi(a\vert s)$ models the agent's behavior
-
-\vfill
-
-\textbf{Policy Search}~\cite{deisenroth2013survey}: find policy $\pi \in \Pi$ that maximizes the expected sum of rewards ${J(\pi) = \mathop{E_{\pi}}\left[\sum_{t=0}^{T}\gamma^tr_t\right]}$
-
-\textbf{\textcolor{magenta}{Policy Gradient (PG)}}~\cite{sutton2000policy}: restrict the search to parametric policies $\pi_{\theta}$ via gradient ascent on~$J(\theta)$
-
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Adaptive Policy Search}
-
-\textbf{Adaptation} is needed to trade-off competing aspects of learning on real systems:
-\begin{itemize}
-	\item Safety and efficiency
-	\item Exploration and safety
-	\item Exploration and efficiency
-\end{itemize}
-
-\vfill
-
-%\textbf{Possible approaches:}
-%\begin{itemize}
-%	\item Adpative hyper-parameter schedules for existing algorithms
-%	\item New algorithms with modified objectives or novel techniques
-%\end{itemize}
-
-\vfill
-
-\textbf{State of the art}:
-\begin{itemize}
-	\item Safe RL literature \cite{garcia2015comprehensive} mainly regarding value-based methods 
-	\item Adaptive-step-size PG \cite{pirotta2013adaptive,schulman2015trust}: existing algorithms are either too conservative  or heavily heuristic
-	\item Risk-aware methods \cite{moldovan2014safety} focus on intrinsic uncertainty
-\end{itemize}
-
+\addtocounter{framenumber}{-1}
+\begin{frame}[plain]
+\tableofcontents
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Safety}
-
+\section{Policy Optimization in the Real World}
+\addtocounter{framenumber}{-1}
+\frame{\tableofcontents[currentsection]}
 
 \begin{frame}
-\frametitle{Safe Policy Gradient~\small(State of the Art)}
-"Safety" is used with many meanings in the literature \cite{garcia2015comprehensive}. We focus on \textbf{performance guarantees}~\cite{kakade2002approximately, thomas2015high}, either with a danger-avoidance or an economic meaning:
-
-\begin{align*}
-	J(\theta') - J(\theta) \geq C \quad\text{ in high probability}
-\end{align*}
-
-In \textbf{policy gradient} (e.g., REINFORCE \cite{williams1992simple}) safety can be ensured with an \textbf{adaptive step size}~\cite{pirotta2013adaptive}:
-
-\begin{align*}
-	\theta' = \theta + \textcolor{red}{\mathbf{\alpha}}\widehat{\nabla}_{\theta}J(\theta)
-\end{align*}
-
-A small $\alpha$ is safe, but slows down convergence. The adaptive algorithm can find the best value for each iteration. 
-
+\frametitle{Reinforcement Learning}
 \end{frame}
 
-
 \begin{frame}
-\frametitle{Adaptive Batch Size for Safe PG~\small(NIPS 2017\footnote{Submitted before starting the PhD})}
-Idea: also adapt the \textbf{batch size} used to estimate the gradient
-
-\begin{align*}
-	\widehat{\nabla}_{\theta}^NJ(\theta) = \frac{1}{\textcolor{red}{\mathbf{N}}}\sum_{i=0}^{N}\underbrace{\textcolor{lightgray}{\left[\sum_{t=0}^T\left(\sum_{h=0}^t\nabla_{\theta}\log\pi_{\theta}(a_h^i\mid s_h^i)\right) \gamma^tr_t\right]}}_{\text{gradient information from $i$-th episode of experience}}
-\end{align*}
-
-A large batch size is safe, but inefficient.
-
-\vfill
-
-\colorbox{cyan!10}{
-\begin{minipage}{\textwidth}
-Contributions~\cite{papini2017adaptive}:
-\begin{itemize}
-	\item We show that \textbf{coordinate ascent} yields better guarantees than gradient ascent
-	\item We show an interesting duality between step size and batch size
-	\item We provide an adaptive batch size to trade-off safety and efficiency
-\end{itemize}
-\end{minipage}
-}
+\frametitle{Policy Optimization}
 \end{frame}
 
-
 \begin{frame}
-\frametitle{Safely Exploring Policy Gradient \small(submitted to AAAI 2019\footnote{A short version was accepted for the EWRL14 workshop})}
-Existing guarantees are on \textbf{Gaussian policies} with fixed variance:
-\begin{align*}
-	\pi_{\theta}(a \vert s) = \mathcal{N}(\mu_{\theta}(s), \textcolor{red}{\mathbf{\sigma}})
-\end{align*}
-
-Policy variance controls \textbf{exploration}: random behavior used to collect novel information $\implies$ potentially \textbf{unsafe}
-
-\vfill
-
-\textbf{Idea}: also learn the variance via adaptive PG to achieve \textbf{safe exploration}~\cite{amodei2016concrete}.
-
-\vfill
-
-\colorbox{cyan!10}{
-\begin{minipage}{\textwidth}
-Contributions:
+\frametitle{Real-World Requirements}
+{\bf ML Engineer:} "I will improve your controller with RL!"\\
+\vspace{.5cm}
+{\bf Boss:}
 \begin{itemize}
-	\item We generalize safety requirements to model \textit{more practical} scenarios, such as the \textbf{fine-tuning} of handcrafted controllers
-	\item We introduce a surrogate objective that encodes the \textbf{long-term advantages} of exploration
-	\item We extend safety guarantees to the learned-variance case
+	\setlength{\itemsep}{10pt}
+	\item How long will it take?
+	\item Will it \emph{actually} improve?
+	\item Will it behave safely?
+	\item How much better will it become?
 \end{itemize}
-\end{minipage}
-}
 \end{frame}
 
-
 \begin{frame}
-\frametitle{Safe Policy Gradient \small(submitted to MLJ)}
-\framesubtitle{Frontiers}
-\colorbox{cyan!10}{
-	\begin{minipage}{\textwidth}
-In more recent work:
-\begin{itemize}
-	\item We further study the \textbf{convergence properties} of policy gradient methods
-	\item We provide \textbf{general safety guarantees} that do \textit{not} assume a specific class of policies
-\end{itemize}
-\end{minipage}
-}
-
-\vfill
-	
-\textit{General safety conditions:}
-\begin{align*}
-		&\sup_{s}\mathop{E}_{a\sim\pi_{\theta}}\left[\left|\nabla_{\theta}\log\pi_{\theta}(a\vert s)\right|\right] < \infty \\
-		&\sup_{s}\mathop{E}_{a\sim\pi_{\theta}}\left[\left|\nabla_{\theta}\log\pi_{\theta}(a\vert s)\nabla_{\theta}\log\pi_{\theta}(a\vert s)^T\right|\right] < \infty \\
-		&\sup_{s}\mathop{E}_{a\sim\pi_{\theta}}\left[\left|\mathop{Hess}\left(\log\pi_{\theta}(a\vert s)\right)\right|\right] < \infty \\
-	\end{align*}
-	
+\frametitle{Sample Complexity (First Year)}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Sample Efficiency}
-
-
+\section{Monotonic Improvement}
+\addtocounter{framenumber}{-1}
+\frame{\tableofcontents[currentsection]}
 \begin{frame}
-\frametitle{Stochastic Variance-Reduced Policy Gradient~\small(ICML 2018)}
-\textbf{Sample inefficiency} is the main obstacle to real-world applications of PG~\cite{recht2018tour}, made even worse by safety requirements.
-
-\vfill
-
-Recent optimization techniques, such as \textbf{SVRG} \cite{johnson2013accelerating}, combine accurate and inaccurate gradient estimations to improve the \textbf{effective convergence rate}
-
-\vfill
-
-\begin{columns}
-	\begin{column}{0.59\textwidth}
-		Idea: apply SVRG to PG \textbf{(SVRPG)}
-%		\scriptsize
-%		\begin{align*}
-%			\blacktriangledown_{\theta}J(\theta) = \widehat{\nabla}_{\theta}^NJ(\widetilde{\theta}) + \widehat{\nabla}_{\theta}^BJ(\theta) - w(\theta,\widetilde{\theta})\widehat{\nabla}_{\theta}^BJ(\theta)
-%		\end{align*}
-	\end{column}
-	\begin{column}{0.29\textwidth}
-		\includegraphics[width=\textwidth]{pics/cheetah.jpeg}
-	\end{column}
-\end{columns}
-
-\vfill
-
-\colorbox{cyan!10}{
-	\begin{minipage}{\textwidth}
-Contributions~\cite{pmlr-v80-papini18a}:
-\begin{itemize}
-	\item We analyze the potential and challenges of SVRG in RL
-	\item We propose an SVRG-based policy gradient algorithm
-	\item We prove a theoretical \textbf{rate of convergence}
-	\item We empirically show advantages over naive optimization
-\end{itemize}
-\end{minipage}
-}
+\frametitle{Safety in Reinforcement Learning}
 \end{frame}
 
+\begin{frame}
+\frametitle{Monotonic Improvement}
+\end{frame}
 
 \begin{frame}
-\frametitle{Policy Optimization via Importance Sampling~\small(NIPS 2018\footnote{Accepted for oral presentation})}
-Reusing the same data for multiple updates (\textbf{off-policy learning}) can improve \textbf{sample efficiency}
-
-\vfill
-
-Unfortunately, updates degrade as the target policy $\pi_{\theta}$ goes further away from the one used to collect data $\pi_{\tilde{\theta}}$ (\textbf{covariate shift})
-
-\vfill
-
-Idea: penalize \textbf{divergence} in the learning objective
-\begin{align*}
-	\mathcal{L}(\theta) = w(\widetilde{\theta},\theta)\nabla_{\theta}^NJ(\theta) - \frac{\lambda}{N}d(\pi_{\theta}, \pi_{\tilde{\theta}})
-\end{align*}
-
-\colorbox{cyan!10}{
-	\begin{minipage}{\textwidth}
-Contributions:
-\begin{itemize}
-	\item We propose a surrogate objective with strong theoretical motivations $\implies$ \textbf{POIS} algorithm
-	\item We consider both control-based and \textbf{parameter-based} optimization
-	\item We improve over state-of-the-art~\cite{schulman2015trust} in several benchmark tasks
-\end{itemize}
-\end{minipage}
-}
+\frametitle{Smoothing Policies and Safe Policy Gradients}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusion}
-
-
-\begin{frame}
-\frametitle{Future Work}
-
-Short term (one year):
-\begin{itemize}
-	\item Study the problem of \textbf{exploration} in more depth to better capture the costs and advantages of exploratory behavior.
-	\textit{Target: ICML 2019}
-	\item Refine the POIS algorithm. \textit{Target: JMLR}
-\end{itemize}
-
-\vfill
-
-Long term (two years):
-\begin{itemize}
-	\item \textbf{Unify} the proposed methods to achieve efficient safe exploration
-	\item Tackle more challenging and \textbf{realistic} problems
-\end{itemize}
-
-\vfill
-
-\begin{columns}
-	\begin{column}{0.35\textwidth}
-		\includegraphics[height=50pt]{pics/cheetah.jpeg}
-	\end{column}
-%	\begin{column}{0.49\textwidth}
-%		\includegraphics[height=50pt]{pics/real_cheetah.jpg}
-%	\end{column}
-	\begin{column}{0.1\textwidth}
-		\centering
-		\LARGE$\to$
-	\end{column}
-	\begin{column}{0.35\textwidth}
-	\includegraphics[height=50pt]{pics/factory.jpg}
-	\end{column}
-\end{columns}
-
-\end{frame}
-
+\section{Safe Exploration}
+\addtocounter{framenumber}{-1}
+\frame{\tableofcontents[currentsection]}
 
 \begin{frame}
-\frametitle{Attended Courses and Schools}
-\textbf{Passed courses:}
-\begin{itemize}
-	\item DEEP LEARNING: THEORY, TECHNIQUES AND APPLICATIONS (A)
-	\item IMAGE CLASSIFICATION: MODERN APPROACHES (A)
-	\item COMMUNICATING SCIENTIFIC RESEARCH (A) 
-	\item SCIENTIFIC COMMUNICATION IN ENGLISH (A)
-\end{itemize}
-
-\vfill
-
-\textbf{Summer schools:}
-\begin{itemize}
-	\item ACAI Summer School on Reinforcement Learning,  Nieuwpoort, Belgium, 2018 (EXTERNAL COURSE WITH EVALUATION, A)
-	\item 2018 Deep Learning and Reinforcement Learning Summer School, Toronto, Canada
-\end{itemize}
-
+\frametitle{Safe Exploration}
 \end{frame}
-
 
 \begin{frame}
-\frametitle{Publications and Submissions}
-\textbf{Conference papers:}
-\begin{itemize}
-	\scriptsize
-	\item Papini, M., Binaghi, D., Canonaco, G., Pirotta, M. \& Restelli, M. (2018). \textit{Stochastic Variance-Reduced Policy Gradient}. Proceedings of the 35th International Conference on Machine Learning, in PMLR 80:4026-4035
-	\item Alberto Maria Metelli, Matteo Papini, Francesco Faccio, Marcello Restelli; \textit{Policy Optimization via Importance Sampling}; Neural Information Processing Systems 2018 (\textit{to~appear})
-\end{itemize}
-
-\vfill
-
-\textbf{Workshop papers:}
-\begin{itemize}
-	\scriptsize
-	\item Matteo Papini, Andrea Battistello, Marcello Restelli; \textit{Safely Exploring Policy Gradient}; 14th European workshop on Reinforcement Learning
-\end{itemize}
-
-\vfill
-
-\textbf{Submissions:}
-\begin{itemize}
-	\scriptsize
-	\item Matteo Papini, Andrea Battistello, Marcello Restelli; \textit{Safely Exploring Policy Gradient}; AAAI Conference on Artificial Intelligence 2019
-	\item Matteo Papini, Matteo Pirotta, Marcello Restelli; \textit{Safe Policy Gradient}; Machine Learning Journal, Springer
-\end{itemize}
-
+\frametitle{Safely Exploring Policy Gradients (?)}
 \end{frame}
 
+\begin{frame}
+\frametitle{OPTIMIST}
+\end{frame}
+
+\begin{frame}
+\frametitle{(Truly) Deterministic Policy Gradient}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Quality of Solutions}
+\addtocounter{framenumber}{-1}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+\frametitle{Non-Convexity}
+\end{frame}
+
+\begin{frame}
+\frametitle{Global Optimality Guarantees}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Wrapping Up}
+\end{frame}
+
+\begin{frame}
+\frametitle{Publications}
+\end{frame}
+
+\begin{frame}
+\frametitle{Courses and Schools}
+\end{frame}
+
+\begin{frame}
+\frametitle{Teaching}
+\end{frame}
 
 \begin{frame}
 \frametitle{Other Activities}
-\textbf{Teaching 2017/2018:}
-\begin{itemize}
-	\item Informatica B, Prof. Luca Cassano, \textit{lab assistant}, 9 hours
-	\item Web and Internet Economics, Prof. Nicola Gatti, \textit{teaching assistant}, 10 hours
-\end{itemize}
-
-\vfill
-
-\textbf{Previous publications}
-\begin{itemize}
-	\item Papini, Matteo, Matteo Pirotta, and Marcello Restelli. \textit{Adaptive batch size for safe policy gradients}. Advances in Neural Information Processing Systems. 2017
-\end{itemize}
-
-\vfill
-
-\textbf{Industrial projects:}
-\begin{itemize}
-	\item Industry 4.0 (Regione Lombardia, Pirelli)
-\end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{}
+
+
+\begin{frame}[plain]
 \centering
-\LARGE
-\textit{Thank you for your attention}
+{\color{poliblue3} \bf
+\vspace{1cm}
+{\huge Thank you for your attention!} \\
+\vspace{2cm}
+{\LARGE Questions?}
+}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[allowframebreaks]
 \frametitle{Bibliography}
