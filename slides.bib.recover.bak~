@@ -187,26 +187,3 @@
 	publisher={MIT press}
 }
 
-@article{deisenroth2013survey,
-	author    = {Marc Peter Deisenroth and
-	Gerhard Neumann and
-	Jan Peters},
-	title     = {A Survey on Policy Search for Robotics},
-	journal   = {Foundations and Trends in Robotics},
-	volume    = {2},
-	number    = {1-2},
-	pages     = {1--142},
-	year      = {2013}
-}
-
-@inproceedings{sutton1999policy,
-	author    = {Richard S. Sutton and
-	David A. McAllester and
-	Satinder P. Singh and
-	Yishay Mansour},
-	title     = {Policy Gradient Methods for Reinforcement Learning with Function Approximation},
-	booktitle = {{NIPS}},
-	pages     = {1057--1063},
-	publisher = {The {MIT} Press},
-	year      = {1999}
-}

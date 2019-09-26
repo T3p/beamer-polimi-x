@@ -43,7 +43,7 @@ Apply \textbf{Reinforcement Learning} to \textbf{real-world} control problems
 %\frame{\tableofcontents[currentsection]}
 
 \begin{frame}
-\frametitle{Reinforcement Learning{\small~\citep{sutton2018reinforcement}}}
+\frametitle{Reinforcement Learning~\}
 \centering
 \includegraphics[width=.75\textwidth]{pics/rl2.png}\\
 \vspace{.5cm}
@@ -64,10 +64,10 @@ Interesting real-world control problems are \textbf{continuous}
 \begin{center}
 \includegraphics[width=.5\textwidth]{pics/robots.jpg}
 \end{center}
-\textbf{Policy Optimization~\citep{deisenroth2013survey}:}
+\textbf{Policy Optimization:}
 \begin{itemize}
 	\item Scales well with state-action dimensionality
-	\item Convergence guarantees~\citep{sutton1999policy}
+	\item Convergence guarantees
 	\item Robustness to noise
 \end{itemize}
 \end{frame}
