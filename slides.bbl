@@ -1,0 +1,164 @@
+\begin{thebibliography}{25}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Agarwal et~al.(2019)Agarwal, Kakade, Lee, and
+  Mahajan]{agarwal2019optimality}
+Alekh Agarwal, Sham~M Kakade, Jason~D Lee, and Gaurav Mahajan.
+\newblock Optimality and approximation with policy gradient methods in markov
+  decision processes.
+\newblock \emph{arXiv preprint arXiv:1908.00261}, 2019.
+
+\bibitem[Ahmed et~al.(2019)Ahmed, Roux, Norouzi, and
+  Schuurmans]{zafarali2019understanding}
+Zafarali Ahmed, Nicolas~Le Roux, Mohammad Norouzi, and Dale Schuurmans.
+\newblock Understanding the impact of entropy on policy optimization.
+\newblock In \emph{{ICML}}, volume~97 of \emph{Proceedings of Machine Learning
+  Research}, pages 151--160. {PMLR}, 2019.
+
+\bibitem[Amodei et~al.(2016)Amodei, Olah, Steinhardt, Christiano, Schulman, and
+  Man{\'{e}}]{amodei2016concrete}
+Dario Amodei, Chris Olah, Jacob Steinhardt, Paul~F. Christiano, John Schulman,
+  and Dan Man{\'{e}}.
+\newblock Concrete problems in {AI} safety.
+\newblock \emph{CoRR}, abs/1606.06565, 2016.
+
+\bibitem[Beraha et~al.(2019)Beraha, Metelli, Papini, Tirinzoni, and
+  Restelli]{beraha2019feature}
+Mario Beraha, Alberto~Maria Metelli, Matteo Papini, Andrea Tirinzoni, and
+  Marcello Restelli.
+\newblock Feature selection via mutual information: New theoretical insights.
+\newblock 2019.
+
+\bibitem[Bhandari and Russo(2019)]{bhandari2019global}
+Jalaj Bhandari and Daniel Russo.
+\newblock Global optimality guarantees for policy gradient methods.
+\newblock \emph{arXiv preprint arXiv:1906.01786}, 2019.
+
+\bibitem[Bubeck et~al.(2012)Bubeck, Cesa-Bianchi, et~al.]{bubeck2012regret}
+S{\'e}bastien Bubeck, Nicolo Cesa-Bianchi, et~al.
+\newblock Regret analysis of stochastic and nonstochastic multi-armed bandit
+  problems.
+\newblock \emph{Foundations and Trends{\textregistered} in Machine Learning},
+  5\penalty0 (1):\penalty0 1--122, 2012.
+
+\bibitem[Deisenroth et~al.(2013)Deisenroth, Neumann, and
+  Peters]{deisenroth2013survey}
+Marc~Peter Deisenroth, Gerhard Neumann, and Jan Peters.
+\newblock A survey on policy search for robotics.
+\newblock \emph{Foundations and Trends in Robotics}, 2\penalty0 (1-2):\penalty0
+  1--142, 2013.
+
+\bibitem[Garc{\'{\i}}a and Fern{\'{a}}ndez(2015)]{garcia2015comprehensive}
+Javier Garc{\'{\i}}a and Fernando Fern{\'{a}}ndez.
+\newblock A comprehensive survey on safe reinforcement learning.
+\newblock \emph{J. Mach. Learn. Res.}, 16:\penalty0 1437--1480, 2015.
+
+\bibitem[Heess et~al.(2017)Heess, Sriram, Lemmon, Merel, Wayne, Tassa, Erez,
+  Wang, Eslami, Riedmiller, et~al.]{heess2017emergence}
+Nicolas Heess, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, Yuval
+  Tassa, Tom Erez, Ziyu Wang, SM~Eslami, Martin Riedmiller, et~al.
+\newblock Emergence of locomotion behaviours in rich environments.
+\newblock \emph{arXiv preprint arXiv:1707.02286}, 2017.
+
+\bibitem[Kakade and Langford(2002)]{kakade2002approximately}
+Sham~M. Kakade and John Langford.
+\newblock Approximately optimal approximate reinforcement learning.
+\newblock In \emph{{ICML}}, pages 267--274. Morgan Kaufmann, 2002.
+
+\bibitem[Lattimore and Szepesv{\'a}ri(2018)]{lattimore2018bandit}
+Tor Lattimore and Csaba Szepesv{\'a}ri.
+\newblock Bandit algorithms.
+\newblock 2018.
+
+\bibitem[Metelli et~al.(2018)Metelli, Papini, Faccio, and
+  Restelli]{metelli2018policy}
+Alberto~Maria Metelli, Matteo Papini, Francesco Faccio, and Marcello Restelli.
+\newblock Policy optimization via importance sampling.
+\newblock In \emph{NeurIPS}, pages 5447--5459, 2018.
+
+\bibitem[OpenAI(2018)]{OpenAI_dota}
+OpenAI.
+\newblock Openai five.
+\newblock \url{https://blog.openai.com/openai-five/}, 2018.
+
+\bibitem[Papini et~al.(2017)Papini, Pirotta, and Restelli]{papini2017adaptive}
+Matteo Papini, Matteo Pirotta, and Marcello Restelli.
+\newblock Adaptive batch size for safe policy gradients.
+\newblock In \emph{{NeurIPS}}, pages 3591--3600, 2017.
+
+\bibitem[Papini et~al.(2018)Papini, Binaghi, Canonaco, Pirotta, and
+  Restelli]{papini2018stochastic}
+Matteo Papini, Damiano Binaghi, Giuseppe Canonaco, Matteo Pirotta, and Marcello
+  Restelli.
+\newblock Stochastic variance-reduced policy gradient.
+\newblock In \emph{{ICML}}, volume~80 of \emph{Proceedings of Machine Learning
+  Research}, pages 4023--4032. {PMLR}, 2018.
+
+\bibitem[Papini et~al.(2019{\natexlab{a}})Papini, Metelli, Lupo, and
+  Restelli]{papini2019optimistic}
+Matteo Papini, Alberto~Maria Metelli, Lorenzo Lupo, and Marcello Restelli.
+\newblock Optimistic policy optimization via multiple importance sampling.
+\newblock In \emph{{ICML}}, volume~97 of \emph{Proceedings of Machine Learning
+  Research}, pages 4989--4999. {PMLR}, 2019{\natexlab{a}}.
+
+\bibitem[Papini et~al.(2019{\natexlab{b}})Papini, Pirotta, and
+  Restelli]{papini2019smoothing}
+Matteo Papini, Matteo Pirotta, and Marcello Restelli.
+\newblock Smoothing policies and safe policy gradients.
+\newblock \emph{CoRR}, abs/1905.03231, 2019{\natexlab{b}}.
+
+\bibitem[Pirotta et~al.(2013)Pirotta, Restelli, and
+  Bascetta]{pirotta2013adaptive}
+Matteo Pirotta, Marcello Restelli, and Luca Bascetta.
+\newblock Adaptive step-size for policy gradient methods.
+\newblock In \emph{{NIPS}}, pages 1394--1402, 2013.
+
+\bibitem[Pirotta et~al.(2015)Pirotta, Restelli, and
+  Bascetta]{pirotta2015policy}
+Matteo Pirotta, Marcello Restelli, and Luca Bascetta.
+\newblock Policy gradient in lipschitz markov decision processes.
+\newblock \emph{Machine Learning}, 100\penalty0 (2-3):\penalty0 255--283, 2015.
+
+\bibitem[Schulman et~al.(2015)Schulman, Levine, Abbeel, Jordan, and
+  Moritz]{schulman2015trust}
+John Schulman, Sergey Levine, Pieter Abbeel, Michael~I. Jordan, and Philipp
+  Moritz.
+\newblock Trust region policy optimization.
+\newblock In \emph{{ICML}}, volume~37 of \emph{{JMLR} Workshop and Conference
+  Proceedings}, pages 1889--1897. JMLR.org, 2015.
+
+\bibitem[Shani et~al.(2019)Shani, Efroni, and Mannor]{shani2019adaptive}
+Lior Shani, Yonathan Efroni, and Shie Mannor.
+\newblock Adaptive trust region policy optimization: Global convergence and
+  faster rates for regularized mdps.
+\newblock \emph{arXiv preprint arXiv:1909.02769}, 2019.
+
+\bibitem[Sutton and Barto(2018)]{sutton2018reinforcement}
+Richard~S Sutton and Andrew~G Barto.
+\newblock \emph{Reinforcement learning: An introduction}.
+\newblock MIT press, 2018.
+
+\bibitem[Sutton et~al.(1999)Sutton, McAllester, Singh, and
+  Mansour]{sutton1999policy}
+Richard~S. Sutton, David~A. McAllester, Satinder~P. Singh, and Yishay Mansour.
+\newblock Policy gradient methods for reinforcement learning with function
+  approximation.
+\newblock In \emph{{NIPS}}, pages 1057--1063. The {MIT} Press, 1999.
+
+\bibitem[Xu et~al.(2019{\natexlab{a}})Xu, Gao, and Gu]{xu2019improved}
+Pan Xu, Felicia Gao, and Quanquan Gu.
+\newblock An improved convergence analysis of stochastic variance-reduced
+  policy gradient.
+\newblock In \emph{{UAI}}, page 191. {AUAI} Press, 2019{\natexlab{a}}.
+
+\bibitem[Xu et~al.(2019{\natexlab{b}})Xu, Gao, and Gu]{xu2019sample}
+Pan Xu, Felicia Gao, and Quanquan Gu.
+\newblock Sample efficient policy gradient methods with recursive variance
+  reduction.
+\newblock \emph{CoRR}, abs/1909.08610, 2019{\natexlab{b}}.
+
+\end{thebibliography}

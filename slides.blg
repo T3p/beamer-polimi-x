@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: slides.aux
+The style file: plainnat.bst
+Database file #1: slides.bib
+Warning--I'm ignoring OpenAI_dota's extra "year" field
+--line 7 of file slides.bib
+Warning--empty journal in beraha2019feature
+Warning--empty journal in lattimore2018bandit
+You've used 25 entries,
+            2773 wiz_defined-function locations,
+            723 strings with 8819 characters,
+and the built_in function-call counts, 13857 in all, are:
+= -- 1239
+> -- 881
+< -- 20
++ -- 297
+- -- 270
+* -- 1127
+:= -- 2050
+add.period$ -- 82
+call.type$ -- 25
+change.case$ -- 162
+chr.to.int$ -- 23
+cite$ -- 52
+duplicate$ -- 641
+empty$ -- 1057
+format.name$ -- 305
+if$ -- 2974
+int.to.chr$ -- 3
+int.to.str$ -- 1
+missing$ -- 25
+newline$ -- 133
+num.names$ -- 100
+pop$ -- 343
+preamble$ -- 1
+purify$ -- 138
+quote$ -- 0
+skip$ -- 537
+stack$ -- 0
+substring$ -- 494
+swap$ -- 147
+text.length$ -- 14
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 270
+warning$ -- 2
+while$ -- 111
+width$ -- 0
+write$ -- 333
+(There were 3 warnings)

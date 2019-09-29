@@ -1,19 +1,17 @@
-\documentclass{beamer}
+\documentclass[aspectratio=169]{beamer}
 \usepackage{lmodern}
 \usepackage[utf8]{inputenc}
 
 \usepackage{enumerate}
 \usepackage{multimedia}
 
-\usetheme{polimix}
+\usetheme{polimithx}
 \usepackage{natbib}
+\usepackage{booktabs}
  
-\title[Safe Policy Optimization]{Safe Policy Optimization}
-\subtitle{{\small Ph.D. Course in Information Technology, XXXIII cycle} \\Second Annual Report}
-
-\author[M. Papini]{Matteo Papini}
-\supervisor{\small Supervisor}{\small Marcello Restelli}
-\date[30/9/2019]{\small 30 Settembre 2019}
+\title[Safe Policy Optimization]{Safe Policy Optimization\\ \vspace{0.2cm}\small{Ph.D. Course in Information Technology (Computer Science and Engineering), XXXIII cycle} \\ Second Yearly Evaluation}
+\date[AAA]{\vspace{0.2cm}  30th September 2019 }
+\author[M. Papini]{\textbf{Matteo Papini} \\ Supervisor: Prof. Marcello Restelli}
 
 \begin{document}
 
@@ -29,7 +27,8 @@
 \frametitle{Motivation}
 Apply \textbf{Reinforcement Learning} to \textbf{real-world} control problems
 \vfill
-\includegraphics[width=\textwidth]{pics/factory.jpg}
+\centering
+\includegraphics[width=.85\textwidth]{pics/factory.jpg}
 \end{frame}
 
 \addtocounter{framenumber}{-1}
@@ -38,51 +37,78 @@ Apply \textbf{Reinforcement Learning} to \textbf{real-world} control problems
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Policy Optimization in the Real World}
-%\addtocounter{framenumber}{-1}
-%\frame{\tableofcontents[currentsection]}
+\section{Problem Definition}
+\addtocounter{framenumber}{-1}
+\frame[plain]{\tableofcontents[currentsection]}
 
 \begin{frame}
+\begin{overlayarea}{\textwidth}{\textheight}
 \frametitle{Reinforcement Learning{\small~\citep{sutton2018reinforcement}}}
 \centering
-\includegraphics[width=.75\textwidth]{pics/rl2.png}\\
-\vspace{.5cm}
-{\bf Policy:} agent's behavior ($s\mapsto a$) \\
-{\bf Performance $\rho$:} \emph{expected} total reward \\
-{\bf Goal:} find policy maximizing performance
+\includegraphics[width=.5\textwidth]{pics/rl2.png}\\
 \vspace{.25cm}
+\only<2->{
+{\bf Policy $\pi$:} agent's behavior ($s\mapsto a$) \\
+{\bf Performance $\rho(\pi)$:} \emph{expected} total reward \\
+{\bf Goal:} find policy maximizing performance
+}
+
+\vspace{.25cm}
+\only<3->{
 \begin{itemize}
 	\item Model-free
 	\item Online
 	\item Iterative
 \end{itemize}
+}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Safety in Reinforcement Learning}
+\begin{itemize}
+	\setlength{\itemsep}{20pt}
+	\item<1-> Many notions of safety ~\citep{amodei2016concrete,garcia2015comprehensive}
+	\item<2-> Assume performance $\rho$ already encodes \emph{safety constraints}
+	\item<3-> The optimal policy will be safe
+	\item<4-> \textbf{The learning process itself may not be!}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Continuous Reinforcement Learning}
+\vspace{.25cm}
+\begin{overlayarea}{\textwidth}{\textheight}
 Interesting real-world control problems are \textbf{continuous}
 \begin{center}
-\includegraphics[width=.5\textwidth]{pics/robots.jpg}
+\includegraphics[width=.45\textwidth]{pics/robots.jpg}
 \end{center}
+
+\only<2->{
 \textbf{Policy Optimization~\citep{deisenroth2013survey}:}
 \begin{itemize}
 	\item Scales well with state-action dimensionality
 	\item Convergence guarantees~\citep{sutton1999policy}
 	\item Robustness to noise
 \end{itemize}
+}
+\end{overlayarea}
 \end{frame}
 
 \begin{frame}
+\begin{overlayarea}{\textwidth}{\textheight}
 \frametitle{Policy Optimization}
 \begin{itemize}
-	\item Fix a class of controllers with tunable parameters $\boldsymbol{x}\in\mathcal{X}$
-	\item Find policy parameters maximizing performance:
-	\[	\LARGE
+	\item<1-> Fix a class of controllers with tunable parameters $\boldsymbol{x}\in\mathcal{X}$
+	\item<2-> Find policy parameters maximizing performance:
+	\vspace{-.25cm}
+	\[	\Large
 		\max\limits_{\boldsymbol{x}\in\mathcal{X}} \rho(\boldsymbol{x})
 	\]
-	\vfill
-	\item \textbf{Policy Gradient:} solve it with \emph{Stochastic Gradient Descent}
-	\vfill
+
+	\item<3-> \textbf{Policy Gradient:} solve it with \emph{Stochastic Gradient Descent}
+	\vspace{.25cm}
+	\only<4->{
 	\begin{columns}
 		\begin{column}{.5\textwidth}
 			\centering
@@ -92,88 +118,117 @@ Interesting real-world control problems are \textbf{continuous}
 		\end{column}
 		\begin{column}{.5\textwidth}
 			\centering
-			\includegraphics[width=.8\textwidth]{pics/parkour.jpg}
+			\includegraphics[width=.9\textwidth]{pics/parkour.jpg}
 			\\ 
 			\emph{\cite{heess2017emergence}}
 		\end{column}
 	\end{columns}
+}
 \end{itemize}
+\end{overlayarea}
 \end{frame}
 
 \begin{frame}
+\begin{overlayarea}{\textwidth}{\textheight}
 \frametitle{Real-World Requirements}
 \begin{columns}
-	\begin{column}[t]{.5\textwidth}
-		{\bf Boss:}\\
-		\phantom{"I will improve your controller with RL!"}
-		\vspace{1cm}
-		\begin{itemize}
-			\setlength{\itemsep}{10pt}
-			\item How long will it take?
-			\item Will it \emph{actually} improve?
-			\item Will it behave safely?
-			\item How much better will it become?
-		\end{itemize}
+	\begin{column}{.5\textwidth}
+		{\bf ML Engineer:} "I will improve your controller with RL!"
 	\end{column}
-	\begin{column}[t]{.5\textwidth}
-	{\bf ML Engineer:}\\ 
-	"I will improve your controller with RL!"
-	\vspace{1cm}
-	\begin{itemize}
-		\setlength{\itemsep}{10pt}
-		\item[] Unknown \hfill \emph{sample complexity}
-		\item[] Eventually \hfill \emph{safety}
-		\item[] Eventually \hfill \emph{safety}
-		\item[] Unknown \hfill \emph{quality of solutions}
-	\end{itemize}
+	\begin{column}{.5\textwidth}
+	\includegraphics[width=.75\textwidth]{pics/robots.jpg}
 	\end{column}
 \end{columns}
+
+%\vspace{.5cm}
+\only<2->{
+{\bf Boss:}\\
+\begin{itemize}
+	\setlength{\itemsep}{10pt}
+	\item<2-> "How long will it take?" \qquad\only<6->{\textcolor{red}{Unkown}}
+	\item<3-> "Will it \emph{actually} improve?"\qquad\only<7->{\textcolor{red}{Eventually}}
+	\item<4-> "Will it behave safely?"\qquad\only<8->{\textcolor{red}{Eventually}}
+	\item<5-> "How much better will it become?"\qquad\only<9->{\textcolor{red}{Unkown}}
+\end{itemize}
+}
+\end{overlayarea}
 \end{frame}
 
-\begin{frame}
-\frametitle{Sample Complexity (First Year)}
+\section{Proposed Solutions}
+\addtocounter{framenumber}{-1}
+\frame{\tableofcontents[currentsection]}
+\subsection{Sample Complexity}
+
+\addtocounter{framenumber}{-1}
+\begin{frame}[plain]
+\begin{overlayarea}{\textwidth}{\textheight}
+\vspace{2cm}
+\begin{center}
+	\Large
+	Sample Complexity \\("How long will it take?")
+\end{center}
+
+\vspace{1cm}
+\only<2->{
+First year:\\
+\vspace{.5cm}
+\small
 \textbf{Matteo Papini}, Damiano Binaghi, Giuseppe Canonaco, Matteo Pirotta, Marcello Restelli:
 \emph{Stochastic Variance-Reduced Policy Gradient}. \textbf{ICML 2018}: 4023-4032
-\vfill
+
+\vspace{.25cm}
 Alberto Maria Metelli, \textbf{Matteo Papini}, Francesco Faccio, Marcello Restelli:
 \emph{Policy Optimization via Importance Sampling}. \textbf{NeurIPS 2018}: 5447-5459
+}
+\end{overlayarea}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Safe Policy Updates}
+\subsection{Safe Policy Updates}
+
 \addtocounter{framenumber}{-1}
-\frame{\tableofcontents[currentsection]}
-\begin{frame}
-\frametitle{Safety in Reinforcement Learning}
-\begin{itemize}
-	\setlength{\itemsep}{10pt}
-	\item Many notions of safety ~\citep{amodei2016concrete,garcia2015comprehensive}
-	\item Assume performance $\rho$ already encodes \emph{safety constraints}
-	\item The optimal policy will be safe
-	\item \textbf{The learning process itself may not be!}
-\end{itemize}
+\begin{frame}[plain]
+\begin{center}
+	\Large
+	Safe Policy Updates \\("Will it actually improve?")
+\end{center}
 \end{frame}
+
 
 \begin{frame}
 \frametitle{Monotonic Performance Improvement}
+\begin{overlayarea}{\textwidth}{\textheight}
 \begin{itemize}
 	\item A concrete problem in Reinforcement Learning
 \end{itemize}
-\vfill
+\vspace{-.25cm}
 \centering
-\includegraphics[width=.75\textwidth]{example-image-a}
+\only<1>{
+	\includegraphics[width=.75\textwidth]{pics/imp1.pdf}
+}
+\only<2>{
+	\hspace{-4pt}\includegraphics[width=.75\textwidth]{pics/imp2.pdf}
+}
+\only<3->{
+	\hspace{-8pt}\includegraphics[width=.75\textwidth]{pics/imp3.pdf}
+}
+\end{overlayarea}
 \end{frame}
 
 \begin{frame}
 \frametitle{Smoothing Policies and Safe Policy Gradients}
-A policy gradient algorithm with \textbf{monotonic improvement} guarantees
-\vfill
+\begin{overlayarea}{\textwidth}{\textheight}
+A policy gradient algorithm with \textbf{monotonic improvement} guarantees\\
+\vspace{.25cm}
+\only<2->{
 State of the art~\citep{kakade2002approximately,pirotta2015policy,pirotta2013adaptive,schulman2015trust,papini2017adaptive}:
 \begin{itemize}
 	\item Restricted policy class
 	\item Regularity assumptions on the environment
 \end{itemize}
-\vfill
+}
+\vspace{.25cm}
+\only<3->{
 Our method:
 \begin{itemize}
 	\item General conditions on policy
@@ -181,31 +236,46 @@ Our method:
 	\item Simpler formulation
 	\item Smaller gap between theory and practice
 \end{itemize}
-\vfill
-Submitted to JMLR
+}
+\vspace{.5cm}
+\only<3->{
+\emph{Submitted to JMLR}
+}
+\end{overlayarea}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Safe Exploration}
+\subsection{Safe Exploration}
 \addtocounter{framenumber}{-1}
-\frame{\tableofcontents[currentsection]}
+\begin{frame}[plain]
+\begin{center}
+	\Large
+	Safe Exploration \\("Will it behave safely?")
+\end{center}
+\end{frame}
 
 \begin{frame}
 \frametitle{Safe Exploration}
+\begin{overlayarea}{\textwidth}{\textheight}
+\vspace{.5cm}	
 \textbf{Exploration:} perform diverse actions to gather novel information
 \begin{itemize}
 	\item Necessary for improvement
-	\item Tipically: perform \emph{random} actions
+	\item Tipically: perform \emph{random} actions~\citep{zafarali2019understanding}
 	\item Unpredictable behavior may be \textbf{unsafe}
 \end{itemize}
-\vfill
+
+\vspace{1cm}
+\only<2->{
 Control the amount of stochasticity:
 \vspace{.3cm}
 
 \textbf{Matteo Papini}, Andrea Battistello, Marcello Restelli; \emph{“Safely Exploring Policy Gradient”}; 14th European Workshop on Reinforcement Learning (\textbf{EWRL14}), Lille, France, 2018
+\vspace{.5cm}
 
-\vfill
-Revised version planned for \textbf{AISTATS 2020}
+\emph{Revised version planned for \textbf{AISTATS 2020}}
+}
+\end{overlayarea}
 \end{frame}
 
 %\begin{frame}
@@ -214,20 +284,24 @@ Revised version planned for \textbf{AISTATS 2020}
 
 \begin{frame}
 \frametitle{OPTIMIST}
+\begin{overlayarea}{\textwidth}{\textheight}
+\vspace{.5cm}	
 \textbf{Direct} exploration towards interesting information
 
-\vfill
+\vspace{1cm}
+\only<2->{
 \emph{Not} policy gradient, inspired by Multi-Armed-Bandit literature~\citep{bubeck2012regret,lattimore2018bandit}
 
-\vfill
 \begin{itemize}
 	\item Global convergence
 	\item Still requires stochasticity
 	\item Non-monotonic performance
 \end{itemize}
-\vfill
-Published at \textbf{ICML 2019}
 
+\vspace{1cm}
+\textbf{Matteo Papini}, Alberto Maria Metelli, Lorenzo Lupo, Marcello Restelli: \emph{Optimistic Policy Optimization via Multiple Importance Sampling}. \textbf{ICML 2019}: 4989-4999.
+}
+\end{overlayarea}
 \end{frame}
 
 \begin{frame}
@@ -240,62 +314,114 @@ Published at \textbf{ICML 2019}
 \end{itemize}
 
 \vfill
-Planned for \textbf{ICML 2020}
+\emph{Planned for \textbf{ICML 2020}}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Quality of Solutions}
+\section{Future Work}
 \addtocounter{framenumber}{-1}
 \frame{\tableofcontents[currentsection]}
+\subsection{Quality of Solutions}
+
+\addtocounter{framenumber}{-1}
+\begin{frame}[plain]
+\begin{center}
+	\Large
+	Quality of Solutions \\("How much better will it become?")
+\end{center}
+\end{frame}
 
 \begin{frame}
 \frametitle{Non-Convexity}
 \begin{itemize}
-	\setlength{\itemsep}{10pt}
-	\item The performance objective $\rho$ is \textbf{nonconvex}
-	\item Policy gradient only converges to \textbf{local optima}
-	\item Locally optimal performance could be poor
-	\item Locally optimal policies may be \textbf{unsafe}
+	\setlength{\itemsep}{5pt}
+	\item<1-> The performance objective $\rho$ is \textbf{nonconvex}
+	\item<2-> Policy gradient only converges to \textbf{local optima}
+	\item<3> Locally optimal performance could be poor
+	\item<4> Locally optimal policies may be \textbf{unsafe}
 \end{itemize}
+\vspace{.25cm}
+\centering
+\includegraphics[width=.4\textwidth]{pics/nonconvex.png}
 \end{frame}
 
 \begin{frame}
 \frametitle{Global Optimality Guarantees}
+\begin{overlayarea}{\textwidth}{\textheight}
+\vspace{.5cm}
 \begin{itemize}
 	\setlength{\itemsep}{10pt}
-	\item The policy optimization problem is \emph{special}
-	\item Convergence to the \textbf{global optimum} is possible in some cases~\citep{bhandari2019global,agarwal2019optimality,shani2019adaptive}
-	\item Can we exploit tools from \textbf{convex optimization} to design \emph{new} algorithms?
+	\item<1-> The \emph{policy} optimization problem is \emph{special}
+	\item<2-> Convergence to the \textbf{global optimum} is possible in some cases~\citep{bhandari2019global,agarwal2019optimality,shani2019adaptive}
+	\item<3-> Can we exploit tools from \textbf{convex optimization} to design \emph{new} algorithms?
 \end{itemize}
-\vfill
-Possible target: \textbf{NeurIPS 2020}
+\vspace{.5cm}
+\only<4->{
+\begin{columns}
+	\begin{column}{.5\textwidth}
+		\centering
+		Possible target: \textbf{NeurIPS 2020}
+	\end{column}
+	\begin{column}{.5\textwidth}
+		\centering
+		\includegraphics[width=.75\textwidth]{pics/fb.jpg}
+	\end{column}
+\end{columns}
+}
+\end{overlayarea}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+\addtocounter{framenumber}{-1}
+\frame{\tableofcontents[currentsection]}
 
 \begin{frame}
 \frametitle{Wrapping Up}
-Policy optimization in the real world:
+\begin{overlayarea}{\textwidth}{\textheight}
 \begin{itemize}
 	\setlength{\itemsep}{10pt}
-	\item How long will it take?~\citep{papini2018stochastic,xu2019improved,xu2019sample}
-	\item Will it \emph{actually} improve?~\citep{papini2019smoothing}
-	\item Will it behave safely? (work in progress)
-	\item How much better will it become? (future work)
+	\item Sample Complexity~\citep{papini2018stochastic,xu2019improved,xu2019sample}
+	\item Safe Policy Updates~\citep{papini2019smoothing}
+	\item Safe Exploration (\cite{papini2019optimistic} + work in progress)
+	\item Quality of Solutions (future work)
 \end{itemize}
 \vspace{1cm}
+\only<2->{
 We also want to:
+\vspace{-1cm}
 \begin{columns}
 	\begin{column}{.5\textwidth}
 		\begin{itemize}
 			\item Find a trade-off between competing goals
-			\item Apply to a real problem
+			\item Apply to real problems
 		\end{itemize}
 	\end{column}
 	\begin{column}{.5\textwidth}
 		\includegraphics[width=\textwidth]{pics/pirelli.jpg}
 	\end{column}
 \end{columns}
+}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Publications (Overview)}
+\footnotesize 
+\begin{table}
+	\begin{tabular}{llcccc}
+		& GGS & \textcolor{black!40}{2017} & 2018 & 2109 & 2020 \\
+		\toprule
+		\textbf{ICML} & A++ & & \citep{papini2018stochastic} & \citep{papini2019optimistic} & planed \\
+		\textbf{NeurIPS} & A++ & \textcolor{black!40}{\citep{papini2017adaptive}} & \citep{metelli2018policy} & & planned \\
+		\midrule
+		AAAI &  A++ & & & & submitted \\
+		AISTATS & A+ & & & & planned \\
+		IJCNN & B & &  &\citep{beraha2019feature} & \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
 \end{frame}
 
 \begin{frame}
@@ -311,24 +437,7 @@ We also want to:
 \end{itemize}
 
 \vfill
-\emph{Previous:}
-\begin{itemize}
-	\small
-	\setlength{\itemsep}{10pt}
-	\item  \textbf{Matteo Papini}, Matteo Pirotta, Marcello Restelli:
-	\emph{Adaptive Batch Size for Safe Policy Gradients}. \textbf{NeurIPS 2017}: 3591-3600
-\end{itemize}
 
-\vfill
-\emph{Workshop papers:}
-\begin{itemize}
-	\small
-	\item  \textbf{Matteo Papini}, Andrea Battistello, Marcello Restelli: \emph{Safely Exploring Policy Gradient}. EWRL 2018 
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Publications}
 \emph{Second year:}
 \begin{itemize}
 	\small
@@ -338,7 +447,25 @@ We also want to:
 	\item Mario Beraha, Alberto Maria Metelli, \textbf{Matteo Papini}, Andrea Tirinzoni, Marcello Restelli:
 	\emph{Feature Selection via Mutual Information: New Theoretical Insights}. IJCNN 2019
 \end{itemize}
+\end{frame}
 
+\begin{frame}
+\frametitle{Other Publications}
+\emph{Before the Ph.D.:}
+\begin{itemize}
+	\small
+	\setlength{\itemsep}{10pt}
+	\item  \textbf{Matteo Papini}, Matteo Pirotta, Marcello Restelli:
+	\emph{Adaptive Batch Size for Safe Policy Gradients}. \textbf{NeurIPS 2017}: 3591-3600
+\end{itemize}
+
+\vfill
+
+\emph{Workshop papers:}
+\begin{itemize}
+	\small
+	\item  \textbf{Matteo Papini}, Andrea Battistello, Marcello Restelli: \emph{Safely Exploring Policy Gradient}. EWRL 2018 
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -401,7 +528,7 @@ We also want to:
 
 \begin{frame}
 \frametitle{Other Activities}
-\scriptsize
+\tiny
 \textbf{Talks and posters:}
 \begin{itemize}
 	\item Seminar \emph{Temporal Credit Assignment in Off-Policy Reinforcement Learning}, DEIB, November 28th , 2017

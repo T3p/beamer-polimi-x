@@ -3,28 +3,19 @@
 % Requirement
 %\RequirePackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \RequirePackage{tikz}
-\usepackage{ifthen}
 \PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}
 \usefonttheme[onlymath]{serif}
 
-\definecolor{poliblue1}{cmyk}{.4, .1, .1, .40} % PANTONE 5425 C
-\definecolor{poliblue2}{cmyk}{.54, .28, .22, .2} % PANTONE 5425 U
-\definecolor{poliblue3}{cmyk}{.6, .34, .0, .68} %RGB(33,54,82)
-%\graphicspath{{./logo/}}
-
-%supervisor command
-\let\insertsupervisor\relax
-\newcommand\supervisortitle[2]{\def\insertsupervisortitle{#1, #2}}
-\newcommand\supervisor[2]{\def\insertsupervisor{#1: #2}}
-
-\let\insertcoadvisor\relax
-\newcommand\coadvisortitle[2]{\def\insertcoadvisortitle{#1, #2}}
-\newcommand\coadvisor[2]{\def\insertcoadvisor{#1: #2}}
+\definecolor{poliblue1}{RGB}{93,138,168} 
+\definecolor{poliblue2}{RGB}{41,76,113}
+\definecolor{poliblue3}{RGB}{25,43,67}
+\definecolor{orangep}{RGB}{251,146,116}
+\graphicspath{{./logo/}}
 
 % Settings
-\useinnertheme{polimix}
-\useoutertheme{polimix}
-\usecolortheme{polimix}
+\useinnertheme{polimithx}
+\useoutertheme{polimithx}
+\usecolortheme{polimi}
 
 \setbeamertemplate{navigation symbols}{} 
 
